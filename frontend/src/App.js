@@ -1,5 +1,5 @@
 function App() {
-  return <div>Welcome to ProShop</div>;
+  return <p>Welcome to ProShop</p>;
 }
 
 export default App;
