@@ -1,0 +1,41 @@
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { FaShoppingCart, FaUser } from 'react-icons/fa';
+
+import logo from '../assets/logo.png';
+
+function Header() {
+  return (
+    <header>
+      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+        <Container>
+          <LinkContainer to="/">
+            <Navbar.Brand>
+              <img src={logo} alt="brand's logo"></img>
+              ProShop
+            </Navbar.Brand>
+          </LinkContainer>
+          {/* </Link> */}
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto">
+              <LinkContainer to="/cart">
+                <Nav.Link>
+                  <FaShoppingCart />
+                </Nav.Link>
+              </LinkContainer>
+
+              <LinkContainer to="/login">
+                <Nav.Link>
+                  <FaUser></FaUser> Sign In
+                </Nav.Link>
+              </LinkContainer>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
+  );
+}
+
+export default Header;
