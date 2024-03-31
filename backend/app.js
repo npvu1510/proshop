@@ -1,27 +1,27 @@
 import express from 'express';
 
-import products from './data/products.js';
+import productRouter from './routes/productRouter.js';
+
+import AppError from './utils/AppError.js';
+import errorHandler from './controllers/errorController.js';
 
 const app = express();
+
+console.log(x);
+
+app.use('/api', productRouter);
 
 app.get('/', (req, res) => {
   res.send(`<p>Hello World</p>`);
 });
 
-app.get('/api/products', (req, res) => {
-  res.status(200).json(products);
+// Error handle
+app.use('*', (req, res, next) => {
+  const notFoundError = new AppError(504, `${req.originalUrl} not found !`);
+
+  next(notFoundError);
 });
 
-app.get('/api/products/:productId', (req, res) => {
-  const { productId } = req.params;
-  const product = products.find((product) => product._id === productId);
-
-  if (!product)
-    res.status(404).json({ status: 'failed', message: 'Not found' });
-  res.status(200).json({
-    status: 'success',
-    data: { product },
-  });
-});
+app.use(errorHandler);
 
 export default app;
