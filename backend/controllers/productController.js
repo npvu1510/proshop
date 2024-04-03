@@ -1,23 +1,24 @@
+import asyncHandler from '../middleware/asyncHandler.js';
 import Product from '../models/productModel.js';
 
-import AppError from '../utils/AppError.js';
-import asyncHandler from '../utils/asyncHandler.js';
-
-export const getProducts = asyncHandler(async (req, res, next) => {
-  const products = await Product.find();
-
-  return res.status(200).json({
-    status: 'success',
-    data: {
-      products,
-    },
-  });
+// @desc    Fetch all products
+// @route   GET /api/products
+// @access  Public
+const getProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({});
+  res.json(products);
 });
 
-export const getProduct = asyncHandler(async (req, res, next) => {
-  const product = await Product.findById(req.params.productId);
-
-  if (!product) return next(new AppError(404, 'Product not found'));
-
-  return res.status(200).json({ status: 'success', data: { product } });
+// @desc    Fetch single product
+// @route   GET /api/products/:id
+// @access  Public
+const getProductById = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (product) {
+    return res.json(product);
+  }
+  res.status(404);
+  throw new Error('Resource not found');
 });
+
+export { getProducts, getProductById };

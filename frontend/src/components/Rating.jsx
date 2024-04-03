@@ -1,29 +1,60 @@
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 
-function Rating({ rating, numReviews }) {
-  const numFullStars = Math.floor(rating);
-  const stars = Array.from({ length: 5 }, (_, index) => {
-    return (
-      <span key={index}>
-        {index + 1 > numFullStars ? (
-          rating - index === 0.5 ? (
-            <FaStarHalfAlt />
-          ) : (
-            <FaRegStar />
-          )
-        ) : (
+const Rating = ({ value, text, color }) => {
+  return (
+    <div className='rating'>
+      <span>
+        {value >= 1 ? (
           <FaStar />
+        ) : value >= 0.5 ? (
+          <FaStarHalfAlt />
+        ) : (
+          <FaRegStar />
         )}
       </span>
-    );
-  });
-
-  return (
-    <div className="rating">
-      {stars}
-      <span>{`${numReviews} ${numReviews <= 1 ? `review` : `reviews`}`}</span>
+      <span>
+        {value >= 2 ? (
+          <FaStar />
+        ) : value >= 1.5 ? (
+          <FaStarHalfAlt />
+        ) : (
+          <FaRegStar />
+        )}
+      </span>
+      <span>
+        {value >= 3 ? (
+          <FaStar />
+        ) : value >= 2.5 ? (
+          <FaStarHalfAlt />
+        ) : (
+          <FaRegStar />
+        )}
+      </span>
+      <span>
+        {value >= 4 ? (
+          <FaStar />
+        ) : value >= 3.5 ? (
+          <FaStarHalfAlt />
+        ) : (
+          <FaRegStar />
+        )}
+      </span>
+      <span>
+        {value >= 5 ? (
+          <FaStar />
+        ) : value >= 4.5 ? (
+          <FaStarHalfAlt />
+        ) : (
+          <FaRegStar />
+        )}
+      </span>
+      <span className='rating-text'>{text && text}</span>
     </div>
   );
-}
+};
+
+Rating.defaultProps = {
+  color: '#f8e825',
+};
 
 export default Rating;

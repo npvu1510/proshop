@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import '../src/assets/styles/index.css';
-import '../src/assets/styles/bootstrap.custom.css';
+import { Provider } from 'react-redux';
 
 import {
   createBrowserRouter,
@@ -12,21 +10,28 @@ import {
 } from 'react-router-dom';
 
 import App from './App';
-import Home from './screens/Home';
-import ProductDetails from './screens/ProductDetails';
+import HomeScreen from './screens/HomeScreen';
+import ProductScreen from './screens/ProductScreen';
+
+import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import store from './store';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route index element={<Home />} />
-      <Route path="/product/:productId" element={<ProductDetails />} />
+      <Route index element={<HomeScreen />} />
+      <Route path="/product/:productId" element={<ProductScreen />} />
     </Route>
   )
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
-  <RouterProvider router={router} />
-  // </React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </React.StrictMode>
 );

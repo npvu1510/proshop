@@ -1,28 +1,25 @@
+import express from 'express';
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env' });
-console.log(process.env.NODE_ENV);
-
+dotenv.config();
 import connectDB from './config/db.js';
+import productRoutes from './routes/productRoutes.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+
+const port = process.env.PORT || 5000;
+
 connectDB();
 
-import app from './app.js';
-const port = process.env.PORT || 9000;
-const server = app.listen(port, () => {
-  console.log(`Server is runnit on port ${port}...`);
+const app = express();
+
+app.use('/api/products', productRoutes);
+
+app.get('/', (req, res) => {
+  res.send('API is running...');
 });
 
-process.on('uncaughtException', (err) => {
-  console.log(
-    `🧨 UNCAUGHT EXCEPTION (${err.name} ${err.message}). Server is shutting down... `
-  );
-  server.close(() => process.exit(1));
-});
+app.use(notFound);
+app.use(errorHandler);
 
-process.on('unhandledRejection', (err) => {
-  console.log(
-    `🧨 UNHANDLED REJECTION (${err.name} ${err.message}). Server is shutting down... `
-  );
-
-  // Graceful shutdown
-  process.exit(1);
-});
+app.listen(port, () =>
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`)
+);
