@@ -5,6 +5,10 @@ const initialState = localStorage.getItem('cart')
   : { cartItems: [] };
 console.log(initialState);
 
+const formatCurrency = (num) => {
+  return num.toFixed(2);
+};
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -19,22 +23,25 @@ const cartSlice = createSlice({
       if (isExist)
         state.cartItems = state.cartItems.map((item) =>
           item._id === action.payload._id
-            ? { ...item, qty: item.qty + 1 }
+            ? { ...item, qty: item.qty + action.payload.qty }
             : item
         );
       else state.cartItems.push(action.payload);
 
-      state.itemsPrice = state.cartItems.reduce(
+      const itemsPrice = state.cartItems.reduce(
         (acc, currItem) => acc + currItem.price * currItem.qty,
         0
       );
+      state.itemsPrice = formatCurrency(itemsPrice);
 
-      state.shippingPrice = state.itemsPrice > 100 ? 10 : 0;
+      const shippingPrice = state.itemsPrice > 100 ? 0 : 10;
+      state.shippingPrice = formatCurrency(shippingPrice);
 
-      state.taxPrice = (state.itemsPrice + state.shippingPrice) * 0.1;
+      const taxPrice = itemsPrice + shippingPrice;
+      state.taxPrice = formatCurrency(taxPrice);
 
-      state.totalPrice =
-        state.itemsPrice + state.shippingPrice + state.taxPrice;
+      const totalPrice = itemsPrice + shippingPrice + taxPrice;
+      state.totalPrice = formatCurrency(totalPrice);
 
       localStorage.setItem('cart', JSON.stringify(state));
     },
