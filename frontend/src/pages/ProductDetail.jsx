@@ -1,16 +1,18 @@
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
-import { useGetProductDetailsQuery } from '../slices/productSlice';
+// import { useState, useEffect } from 'react';
+
+import { Link, useParams } from 'react-router-dom';
+import { Row, Col, ListGroup, Card, Image, Button } from 'react-bootstrap';
+
 import Rating from '../components/Rating';
 
-const ProductScreen = () => {
-  const { id: productId } = useParams();
+import { useGetProductDetailsQuery } from '../slices/productSlice';
 
+function ProductDetails() {
+  const { productId } = useParams();
   const {
     data: product,
     isLoading,
-    error,
+    isError: error,
   } = useGetProductDetailsQuery(productId);
 
   return (
@@ -81,6 +83,6 @@ const ProductScreen = () => {
       )}
     </>
   );
-};
+}
 
-export default ProductScreen;
+export default ProductDetails;

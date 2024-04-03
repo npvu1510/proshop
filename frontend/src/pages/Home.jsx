@@ -1,12 +1,11 @@
 import { Row, Col } from 'react-bootstrap';
-import { useGetProductsQuery } from '../slices/productSlice';
+
 import Product from '../components/Product';
 
-const HomeScreen = () => {
-  // const { data: products, isLoading, error } = useGetProductsQuery();
-  const products = [];
-  const isLoading = true;
-  const error = false;
+import { useGetProductsQuery } from '../slices/productSlice';
+
+const Home = () => {
+  const { data: products, isLoading, error } = useGetProductsQuery();
 
   return (
     <>
@@ -29,5 +28,4 @@ const HomeScreen = () => {
     </>
   );
 };
-
-export default HomeScreen;
+export default Home;
