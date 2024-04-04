@@ -28,6 +28,9 @@ function ProductDetails() {
     isError: error,
   } = useGetProductDetailsQuery(productId);
 
+  console.log('rerender ProductDetails');
+  console.log(isLoading, product);
+
   const dispatch = useDispatch();
 
   const handleQtyChange = (e) => {

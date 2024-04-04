@@ -7,6 +7,8 @@ import Message from '../components/Message';
 import { useGetProductsQuery } from '../slices/productSlice';
 
 const Home = () => {
+  console.log('rerender HOME');
+
   const { data: products, isLoading, error } = useGetProductsQuery();
 
   return (

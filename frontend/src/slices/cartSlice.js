@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart'))
   : { cartItems: [] };
-console.log(initialState);
+// console.log(initialState);
 
 const formatCurrency = (num) => {
   return num.toFixed(2);
@@ -22,9 +22,7 @@ const cartSlice = createSlice({
 
       if (isExist)
         state.cartItems = state.cartItems.map((item) =>
-          item._id === action.payload._id
-            ? { ...item, qty: item.qty + action.payload.qty }
-            : item
+          item._id === action.payload._id ? action.payload : item
         );
       else state.cartItems.push(action.payload);
 
@@ -42,6 +40,21 @@ const cartSlice = createSlice({
 
       const totalPrice = itemsPrice + shippingPrice + taxPrice;
       state.totalPrice = formatCurrency(totalPrice);
+
+      state.numItems = state.cartItems.reduce(
+        (acc, curItem) => acc + curItem.qty,
+        0
+      );
+
+      localStorage.setItem('cart', JSON.stringify(state));
+    },
+
+    removeFromCart: (state, action) => {
+      const id = action.payload;
+
+      state.cartItems = state.cartItems.filter(
+        (cartItem) => cartItem._id !== id
+      );
 
       localStorage.setItem('cart', JSON.stringify(state));
     },

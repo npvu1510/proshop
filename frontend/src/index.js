@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 
+import './index.css';
+import './assets/styles/bootstrap.custom.css';
+
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -13,16 +16,16 @@ import App from './App';
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
 
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import store from './store';
+import Cart from './pages/Cart';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index element={<Home />} />
       <Route path="/product/:productId" element={<ProductDetail />} />
+
+      <Route path="/cart" element={<Cart />} />
     </Route>
   )
 );
