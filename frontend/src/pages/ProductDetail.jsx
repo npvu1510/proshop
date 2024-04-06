@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { Link, useParams } from 'react-router-dom';
 import {
   Row,
@@ -11,12 +10,13 @@ import {
   Button,
   Form,
 } from 'react-bootstrap';
+import toast from 'react-hot-toast';
 
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
-import { useGetProductDetailsQuery } from '../slices/productSlice';
+import { useGetProductDetailsQuery } from '../slices/productApiSlice';
 import cartSlice from '../slices/cartSlice';
 
 function ProductDetails() {
@@ -27,9 +27,8 @@ function ProductDetails() {
     isLoading,
     isError: error,
   } = useGetProductDetailsQuery(productId);
-
-  console.log('rerender ProductDetails');
-  console.log(isLoading, product);
+  // console.log('rerender ProductDetails');
+  // console.log(isLoading, product);
 
   const dispatch = useDispatch();
 
@@ -40,6 +39,7 @@ function ProductDetails() {
   const handleAddtoCart = (e) => {
     const item = { ...product, qty };
     dispatch(cartSlice.actions.addToCart(item));
+    toast.success(`Added product #${item._id} to cart`, { duration: 1000 });
   };
 
   return (

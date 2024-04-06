@@ -25,7 +25,12 @@ export const signup = asyncHandler(async (req, res) => {
 // @route   GET /api/users/login
 // @access  Public
 export const login = asyncHandler(async (req, res) => {
+  // console.log(req.body);
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new AppError(400, 'Please provide email and password');
+  }
 
   const user = await User.findOne({ email });
   if (!user) throw new AppError(401, `Account does not exist `);
@@ -35,12 +40,15 @@ export const login = asyncHandler(async (req, res) => {
     throw new AppError(401, `Password is wrong`);
 
   const token = generateToken(res, { _id: user._id });
-  res.status(200).json({ status: 'success', data: { token } });
+  res.status(200).json({
+    status: 'success',
+    data: { id: user._id, name: user.name, email: user.email },
+  });
 });
 
-// @desc    get user profile
-// @route   GET /api/users/profile
-// @access  Private
+// @desc    logout
+// @route   POST /api/users/logout
+// @access  Public
 export const logout = (req, res) => {
   res
     .cookie('jwt', '', { maxAge: 1 })

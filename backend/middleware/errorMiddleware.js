@@ -26,8 +26,8 @@ const resDev = (res, err) => {
   res.status(err.statusCode).json({
     status: err.status,
     message: err.message,
-    stack: err.stack,
-    fullError: err,
+    // stack: err.stack,
+    // fullError: err,
   });
 };
 const resProd = (res, err) => {

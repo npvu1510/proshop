@@ -1,12 +1,44 @@
-import { Navbar, Nav, Container, Badge } from 'react-bootstrap';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+
+import { Navbar, Nav, Container, Badge, NavDropdown } from 'react-bootstrap';
+import { FaShoppingCart, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
+import toast from 'react-hot-toast';
+
+import Loader from './Loader';
+
+import { getUserInfo } from '../selectors';
 import { getCart } from '../selectors';
 
+import { useLogoutMutation } from '../slices/userApiSlice';
+import userSlice from '../slices/userSlice';
+
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   console.log('re-render Header');
+
   const cart = useSelector(getCart);
+  const userInfo = useSelector(getUserInfo);
+
+  const [logout, { isLoading }] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      const res = await logout().unwrap();
+      toast.success(res.message, { duration: 1000 });
+      dispatch(userSlice.actions.removeUser());
+
+      navigate('/login');
+    } catch (err) {
+      console.error(err);
+      toast.error(err.data.message);
+    }
+  };
+
+  if (isLoading) return <Loader />;
 
   return (
     <header>
@@ -22,17 +54,31 @@ const Header = () => {
                 <Nav.Link>
                   <FaShoppingCart /> Cart
                   {cart.numItems && (
-                    <Badge pill bg="success" style={{ marginLeft: '5px' }}>
+                    <Badge pill bg="successF" style={{ marginLeft: '5px' }}>
                       {cart.numItems}
                     </Badge>
                   )}
                 </Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/login">
-                <Nav.Link href="/login">
-                  <FaUser /> Sign In
-                </Nav.Link>
-              </LinkContainer>
+              {userInfo ? (
+                <NavDropdown title={userInfo.name}>
+                  <LinkContainer to="/profile">
+                    <NavDropdown.Item>
+                      <FaUser /> Profile
+                    </NavDropdown.Item>
+                  </LinkContainer>
+
+                  <NavDropdown.Item onClick={handleLogout}>
+                    <FaSignOutAlt /> Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to="/login">
+                  <Nav.Link ink href="/login">
+                    <FaUser /> Sign In
+                  </Nav.Link>
+                </LinkContainer>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

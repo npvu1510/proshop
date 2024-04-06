@@ -4,10 +4,10 @@ import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
-import { useGetProductsQuery } from '../slices/productSlice';
+import { useGetProductsQuery } from '../slices/productApiSlice';
 
 const Home = () => {
-  console.log('rerender HOME');
+  // console.log('rerender HOME');
 
   const { data: products, isLoading, error } = useGetProductsQuery();
 
@@ -16,10 +16,7 @@ const Home = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        // <div>{error?.data.message || error.error}</div>
-        // <Message variant="danger">{error?.data.message || error.error}</Message>
-        // <Message variant="danger">{error && 'Something went wrong'}</Message>
-        <Message variant="danger">Something went wrong</Message>
+        <Message variant="danger">{error.data.message}</Message>
       ) : (
         <>
           <h1>Latest Products</h1>

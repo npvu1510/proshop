@@ -15,9 +15,12 @@ import {
 import App from './App';
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
+import Test from './pages/Test';
 
 import store from './store';
 import Cart from './pages/Cart';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +29,9 @@ const router = createBrowserRouter(
       <Route path="/product/:productId" element={<ProductDetail />} />
 
       <Route path="/cart" element={<Cart />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />}></Route>
+      <Route path="/test" element={<Test />} />
     </Route>
   )
 );
