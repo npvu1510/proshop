@@ -9,7 +9,9 @@ import {
   Image,
   Button,
 } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
+
 import { FaTrashAlt } from 'react-icons/fa';
 
 import Message from '../components/Message';
@@ -120,9 +122,11 @@ const Cart = () => {
                 </ListGroup.Item>
 
                 <ListGroup.Item>
-                  <Button type="button" classname="button-block">
-                    Proceed to checkout
-                  </Button>
+                  <LinkContainer to="/shipping">
+                    <Button type="button" classname="button-block">
+                      Proceed to checkout
+                    </Button>
+                  </LinkContainer>
                 </ListGroup.Item>
               </ListGroup>
             </Card>

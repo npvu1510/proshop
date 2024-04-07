@@ -1,8 +1,11 @@
-import { useForm } from 'react-hook-form';
-import { Row, Col, Button, Form } from 'react-bootstrap';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
+import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
@@ -10,12 +13,8 @@ import Loader from '../components/Loader';
 import { useLoginMutation } from '../slices/userApiSlice';
 import userSlice from '../slices/userSlice';
 import { getUserInfo } from '../selectors';
-import { useEffect, useState } from 'react';
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [showContent, setShowContent] = useState(false);
-
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
 
@@ -45,13 +44,7 @@ const Login = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
-
-  useEffect(() => {
-    if (userInfo) navigate(redirect);
-    else setShowContent(true);
-  }, [userInfo, redirect, navigate]);
-
-  if (!showContent) return <Loader />;
+  if (userInfo) return <Navigate to={redirect} replace />;
 
   return (
     <FormContainer>
@@ -112,7 +105,10 @@ const Login = () => {
       </Form>
       <Row>
         <Col>
-          Don't have an account ? <Link to="/register">Register</Link>
+          Don't have an account ?{' '}
+          <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}>
+            Register
+          </Link>
         </Col>
       </Row>
     </FormContainer>

@@ -30,15 +30,12 @@ const Header = () => {
       const res = await logout().unwrap();
       toast.success(res.message, { duration: 1000 });
       dispatch(userSlice.actions.removeUser());
-
-      navigate('/login');
+      // navigate('/login');
     } catch (err) {
       console.error(err);
       toast.error(err.data.message);
     }
   };
-
-  if (isLoading) return <Loader />;
 
   return (
     <header>

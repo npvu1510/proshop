@@ -18,7 +18,13 @@ export const signup = asyncHandler(async (req, res) => {
 
   const token = generateToken(res, { _id: user._id });
 
-  res.status(201).json({ message: 'success', data: { token } });
+  res.status(200).json({
+    status: 'success',
+    data: {
+      userInfo: { id: user._id, name: user.name, email: user.email },
+      token: token,
+    },
+  });
 });
 
 // @desc    auth user and provide jwt
@@ -42,7 +48,10 @@ export const login = asyncHandler(async (req, res) => {
   const token = generateToken(res, { _id: user._id });
   res.status(200).json({
     status: 'success',
-    data: { id: user._id, name: user.name, email: user.email },
+    data: {
+      userInfo: { id: user._id, name: user.name, email: user.email },
+      token: token,
+    },
   });
 });
 

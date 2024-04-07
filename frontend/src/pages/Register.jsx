@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FormContainer from '../components/FormContainer';
 
-import userSlice from '../slices/userSlice';
+import userSlice, { setUser } from '../slices/userSlice';
 import { useSignupMutation } from '../slices/userApiSlice';
 import { getUserInfo } from '../selectors';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 
-const Register = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+import { setCredentials } from '../slices/userSlice';
 
-  const [showContent, setShowContent] = useState(false);
+const Register = () => {
+  const dispatch = useDispatch();
 
   const userInfo = useSelector(getUserInfo);
 
@@ -25,19 +24,17 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
     getValues,
-    reset,
   } = useForm();
 
   const [signup, { isLoading }] = useSignupMutation();
 
   const onSubmit = async (data) => {
     try {
-      const { data: res, error } = await signup(data);
-      if (error) throw new Error(error.data.message);
-
-      dispatch(userSlice.actions.setCredentials(res));
+      const res = await signup(data).unwrap();
+      dispatch(setCredentials(res.data));
     } catch (err) {
-      toast.error(err.message);
+      console.log(err);
+      toast.error(err.data.message);
     }
   };
   const onError = (error) => {
@@ -47,12 +44,8 @@ const Register = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
-  useEffect(() => {
-    if (userInfo) navigate(redirect);
-    else setShowContent(true);
-  }, [userInfo, redirect, navigate]);
 
-  if (!showContent) return <Loader />;
+  if (userInfo) return <Navigate to={redirect} />;
 
   return (
     <FormContainer>

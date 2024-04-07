@@ -21,6 +21,10 @@ import store from './store';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Shipping from './pages/Shipping';
+import ProtectRoute from './components/ProtectRoute';
+import Payment from './pages/Payment';
+import PlaceOrder from './pages/PlaceOrder';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,7 +34,15 @@ const router = createBrowserRouter(
 
       <Route path="/cart" element={<Cart />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />}></Route>
+      <Route path="/register" element={<Register />} />
+
+      <Route path="" element={<ProtectRoute />}>
+        <Route path="/shipping" element={<Shipping />} />
+        <Route path="/payment" element={<Payment />} />
+
+        <Route path="/place-order" element={<PlaceOrder />} />
+      </Route>
+
       <Route path="/test" element={<Test />} />
     </Route>
   )
