@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -42,7 +41,7 @@ const Login = () => {
     console.log(e);
   };
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
   if (userInfo) return <Navigate to={redirect} replace />;
 

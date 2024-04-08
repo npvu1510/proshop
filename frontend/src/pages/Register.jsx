@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams, Navigate } from 'react-router-dom';
+import { useSearchParams, Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FormContainer from '../components/FormContainer';
 
-import userSlice, { setUser } from '../slices/userSlice';
 import { useSignupMutation } from '../slices/userApiSlice';
 import { getUserInfo } from '../selectors';
 import toast from 'react-hot-toast';
@@ -42,7 +40,7 @@ const Register = () => {
     console.log(errors);
   };
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
 
   if (userInfo) return <Navigate to={redirect} />;

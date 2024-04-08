@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Row, Col, Card, ListGroup, Image, Button } from 'react-bootstrap';
@@ -11,11 +11,14 @@ import Loader from '../components/Loader';
 import { getCart } from '../selectors';
 
 import { useCreateOrderMutation } from '../slices/orderApiSlice';
+import cartSlice from '../slices/cartSlice';
 
 import toast from 'react-hot-toast';
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     cartItems,
 
@@ -27,10 +30,6 @@ const PlaceOrder = () => {
     taxPrice,
     totalPrice,
   } = useSelector(getCart);
-
-  if (!shippingAddress) navigate('/shipping');
-
-  if (!paymentMethod) navigate('/payment');
 
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
@@ -48,14 +47,17 @@ const PlaceOrder = () => {
       };
 
       const res = await createOrder(order).unwrap();
-      toast.success(`Order created successfully`);
-
+      dispatch(cartSlice.actions.clearCart());
       navigate(`/order/${res.data.newOrder._id}`);
     } catch (err) {
       console.error(err);
       toast.error(err.data.message);
     }
   };
+
+  if (!shippingAddress) return <Navigate to="/shipping" />;
+
+  if (!paymentMethod) return <Navigate to="/payment" />;
 
   return (
     <>
@@ -68,10 +70,8 @@ const PlaceOrder = () => {
             <ListGroup.Item>
               <h1>Shipping</h1>
               <p>
-                <strong>
-                  Address:{' '}
-                  {`${shippingAddress.postalCode}, ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.country}`}
-                </strong>
+                <strong>Address: </strong>
+                {`${shippingAddress.postalCode}, ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.country}`}
               </p>
             </ListGroup.Item>
 

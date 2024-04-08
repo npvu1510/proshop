@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
@@ -7,8 +6,6 @@ import { FaShoppingCart, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
 import toast from 'react-hot-toast';
 
-import Loader from './Loader';
-
 import { getUserInfo } from '../selectors';
 import { getCart } from '../selectors';
 
@@ -16,14 +13,13 @@ import { useLogoutMutation } from '../slices/userApiSlice';
 import userSlice from '../slices/userSlice';
 
 const Header = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   console.log('re-render Header');
 
   const cart = useSelector(getCart);
   const userInfo = useSelector(getUserInfo);
 
-  const [logout, { isLoading }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
 
   const handleLogout = async () => {
     try {
@@ -50,7 +46,7 @@ const Header = () => {
               <LinkContainer to="/cart">
                 <Nav.Link>
                   <FaShoppingCart /> Cart
-                  {cart.numItems && (
+                  {cart.numItems !== 0 && (
                     <Badge pill bg="successF" style={{ marginLeft: '5px' }}>
                       {cart.numItems}
                     </Badge>

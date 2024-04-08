@@ -17,7 +17,7 @@ orderRouter.use(protectRoute);
 
 orderRouter.route('/').get(restrictToAdmin, getOrders).post(createOrder);
 orderRouter.route('/:id').get(getOrderById);
-orderRouter.route('/:id/pay').patch(restrictToAdmin, updateOrderToPaid);
+orderRouter.route('/:id/pay').patch(updateOrderToPaid);
 orderRouter
   .route('/:id/deliver')
   .patch(restrictToAdmin, updateOrderToDelivered);

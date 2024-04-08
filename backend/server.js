@@ -11,6 +11,7 @@ import errorHandler from './middleware/errorMiddleware.js';
 import productRouter from './routes/productRouter.js';
 import userRouter from './routes/userRouter.js';
 import orderRouter from './routes/orderRouter.js';
+import { protectRoute } from './middleware/authMiddleware.js';
 
 const port = process.env.PORT || 5000;
 
@@ -28,6 +29,12 @@ app.use(cookieParser());
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/paypal-client-id', protectRoute, (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    data: { clientId: process.env.PAYPAL_CLIENT_ID },
+  });
+});
 
 app.get('/', (req, res) => {
   res.send('API is running...');
