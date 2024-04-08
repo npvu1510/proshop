@@ -1,4 +1,3 @@
-// import { useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 
 import { Row, Col, ListGroup, Card, Image } from 'react-bootstrap';
@@ -18,13 +17,11 @@ import { useGetPayPalClientIdQuery } from '../slices/paypalApiSlice';
 import { useEffect } from 'react';
 
 const Order = () => {
-  // const dispatch = useDispatch();
   const { id } = useParams();
   const { data, isLoading: isLoadingOrder, refetch } = useGetOrderByIdQuery(id);
 
   const order = data?.data.order;
   const user = order?.user;
-  // console.log(order);
 
   const {
     data: paypal,
@@ -35,8 +32,7 @@ const Order = () => {
 
   const [payOrder, { isLoading: isPayingOrder }] = usePayOrderMutation();
 
-  const [dispatch] = usePayPalScriptReducer();
-
+  const [{ dispatch }] = usePayPalScriptReducer();
   useEffect(() => {
     if (!isLoadingPayPal || !errorPayPal) {
       const loadPayPalScript = async () => {
@@ -62,6 +58,7 @@ const Order = () => {
     return actions.order
       .capture()
       .then(async function (details) {
+        console.log(details);
         if (details.status === 'COMPLETED') {
           try {
             await payOrder({ id, details }).unwrap();

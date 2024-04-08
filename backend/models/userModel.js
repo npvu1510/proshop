@@ -35,7 +35,7 @@ const userSchema = mongoose.Schema(
 
 // userSchema middleware
 userSchema.pre('save', async function (next) {
-  console.log(this);
+  // console.log(this);
 
   if (!this.isModified('password')) {
     console.log('Không đổi mật khẩu');
@@ -47,15 +47,15 @@ userSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = bcrypt.hashSync(this.password, salt);
 
-  console.log(this.password);
+  // console.log(this.password);
   next();
 });
 
-userSchema.pre('save', async function (next) {
-  console.log('FROM 2', this.password);
+// userSchema.pre('save', async function (next) {
+//   console.log('FROM 2', this.password);
 
-  next();
-});
+//   next();
+// });
 
 // static methods
 

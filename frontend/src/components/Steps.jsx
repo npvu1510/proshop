@@ -19,7 +19,7 @@ const Steps = ({
             <Nav.Link disabled>{step.title}</Nav.Link>
           </Nav.Item>
         ) : (
-          <Nav.Item>
+          <Nav.Item key={idx}>
             <LinkContainer to={step.to}>
               <Nav.Link>{step.title}</Nav.Link>
             </LinkContainer>

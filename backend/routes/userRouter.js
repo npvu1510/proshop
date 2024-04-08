@@ -17,15 +17,7 @@ const userRouter = Router();
 
 userRouter.route('/signup').get().post(signup);
 userRouter.route('/login').get().post(login);
-userRouter.post(
-  '/logout',
-  protectRoute,
-  (req, res, next) => {
-    console.log('abc');
-    next();
-  },
-  logout
-);
+userRouter.post('/logout', protectRoute, logout);
 
 userRouter.use(protectRoute);
 

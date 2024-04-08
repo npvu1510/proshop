@@ -45,7 +45,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 // @access  Private
 export const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
-
+  console.log(orders);
   if (!orders || orders.length === 0)
     throw new AppError(404, 'Orders not found');
 

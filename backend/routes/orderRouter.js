@@ -16,11 +16,13 @@ const orderRouter = express.Router();
 orderRouter.use(protectRoute);
 
 orderRouter.route('/').get(restrictToAdmin, getOrders).post(createOrder);
+
+orderRouter.route('/my-orders').get(getMyOrders);
+
 orderRouter.route('/:id').get(getOrderById);
 orderRouter.route('/:id/pay').patch(updateOrderToPaid);
 orderRouter
   .route('/:id/deliver')
   .patch(restrictToAdmin, updateOrderToDelivered);
-orderRouter.route('/my-orders').get(getMyOrders);
 
 export default orderRouter;
