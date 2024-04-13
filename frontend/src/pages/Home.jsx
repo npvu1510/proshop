@@ -8,8 +8,8 @@ import { useGetProductsQuery } from '../slices/productApiSlice';
 
 const Home = () => {
   // console.log('rerender HOME');
-
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data, isLoading, error } = useGetProductsQuery();
+  const products = data?.data.products;
 
   return (
     <>

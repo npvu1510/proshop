@@ -1,23 +1,28 @@
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-import { Row, Col, ListGroup, Card, Image } from 'react-bootstrap';
+import { Row, Col, ListGroup, Card, Image, Button } from 'react-bootstrap';
 
 import toast from 'react-hot-toast';
 
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import { getUserInfo } from '../selectors';
 
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 import {
+  useDeliverOrderMutation,
   useGetOrderByIdQuery,
   usePayOrderMutation,
 } from '../slices/orderApiSlice';
 import { useGetPayPalClientIdQuery } from '../slices/paypalApiSlice';
-import { useEffect } from 'react';
 
 const Order = () => {
   const { id } = useParams();
+  const userInfo = useSelector(getUserInfo);
+
   const { data, isLoading: isLoadingOrder, refetch } = useGetOrderByIdQuery(id);
 
   const order = data?.data.order;
@@ -31,6 +36,8 @@ const Order = () => {
   } = useGetPayPalClientIdQuery();
 
   const [payOrder, { isLoading: isPayingOrder }] = usePayOrderMutation();
+
+  const [deliverOrder, { isLoading: isDelivering }] = useDeliverOrderMutation();
 
   const [{ dispatch }] = usePayPalScriptReducer();
   useEffect(() => {
@@ -50,7 +57,7 @@ const Order = () => {
     }
   }, [order, paypal, isLoadingPayPal, errorPayPal, isErrorPayPal, dispatch]);
 
-  const isPreparing = isLoadingOrder || isLoadingPayPal || isPayingOrder;
+  const isPreparing = isLoadingOrder || isLoadingPayPal;
 
   if (isPreparing) return <Loader />;
 
@@ -95,15 +102,16 @@ const Order = () => {
     console.log('cancel');
   };
 
-  // const handlePay = async () => {
-  //   try {
-  //     const res = await payOrder(id);
-  //     toast.success('Pay successfully');
-  //     refetch();
-  //   } catch (err) {
-  //     toast.error(err.message);
-  //   }
-  // };
+  const handleDeliver = async () => {
+    try {
+      await deliverOrder(id).unwrap();
+      toast.success(`Delivered #${id}`);
+      refetch();
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.data.message || err.message);
+    }
+  };
 
   return (
     <>
@@ -196,6 +204,15 @@ const Order = () => {
                 </Row>
               </ListGroup.Item>
 
+              {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                <Button
+                  className="btn"
+                  variant="primary"
+                  onClick={handleDeliver}
+                >
+                  Mark as delivered
+                </Button>
+              )}
               {!order.isPaid && (
                 <ListGroup.Item>
                   {/* <Button

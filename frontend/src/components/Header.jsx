@@ -54,17 +54,35 @@ const Header = () => {
                 </Nav.Link>
               </LinkContainer>
               {userInfo ? (
-                <NavDropdown title={userInfo.name}>
-                  <LinkContainer to="/profile">
-                    <NavDropdown.Item>
-                      <FaUser /> Profile
-                    </NavDropdown.Item>
-                  </LinkContainer>
+                <>
+                  <NavDropdown title={userInfo.name}>
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>
+                        <FaUser /> Profile
+                      </NavDropdown.Item>
+                    </LinkContainer>
 
-                  <NavDropdown.Item onClick={handleLogout}>
-                    <FaSignOutAlt /> Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
+                    <NavDropdown.Item onClick={handleLogout}>
+                      <FaSignOutAlt /> Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+
+                  {userInfo.isAdmin && (
+                    <NavDropdown title="Admin">
+                      <LinkContainer to="/admin/products">
+                        <NavDropdown.Item>
+                          <FaUser /> Products
+                        </NavDropdown.Item>
+                      </LinkContainer>
+
+                      <LinkContainer to="/admin/orders">
+                        <NavDropdown.Item>
+                          <FaUser /> Orders
+                        </NavDropdown.Item>
+                      </LinkContainer>
+                    </NavDropdown>
+                  )}
+                </>
               ) : (
                 <LinkContainer to="/login">
                   <Nav.Link ink href="/login">

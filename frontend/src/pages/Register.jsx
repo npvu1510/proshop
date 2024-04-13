@@ -29,6 +29,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     try {
       const res = await signup(data).unwrap();
+      // console.log(res.data);
       dispatch(setCredentials(res.data));
     } catch (err) {
       console.log(err);

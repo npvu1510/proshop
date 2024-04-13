@@ -28,6 +28,7 @@ const Login = () => {
   const onSubmit = async ({ email, password }) => {
     try {
       const res = await login({ email, password }).unwrap();
+      console.log(res.data);
       dispatch(userSlice.actions.setCredentials(res.data));
       console.log(res);
       toast.success('Login successfully', { duration: 1000 });

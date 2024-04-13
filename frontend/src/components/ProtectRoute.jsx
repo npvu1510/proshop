@@ -4,12 +4,20 @@ import { Outlet, Navigate, useLocation } from 'react-router-dom';
 
 import { getUserInfo } from '../selectors';
 
-const ProtectRoute = () => {
+const ProtectRoute = ({ forAdmin = false }) => {
   const { pathname } = useLocation();
   const userInfo = useSelector(getUserInfo);
 
   return userInfo ? (
-    <Outlet />
+    forAdmin ? (
+      userInfo.isAdmin ? (
+        <Outlet />
+      ) : (
+        <Navigate to={`/login?redirect=${pathname}`} replace />
+      )
+    ) : (
+      <Outlet />
+    )
   ) : (
     <Navigate to={`/login?redirect=${pathname}`} replace />
   );

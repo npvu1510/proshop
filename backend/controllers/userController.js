@@ -21,7 +21,12 @@ export const signup = asyncHandler(async (req, res) => {
   res.status(200).json({
     status: 'success',
     data: {
-      userInfo: { id: user._id, name: user.name, email: user.email },
+      userInfo: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
       token: token,
     },
   });
@@ -49,7 +54,12 @@ export const login = asyncHandler(async (req, res) => {
   res.status(200).json({
     status: 'success',
     data: {
-      userInfo: { id: user._id, name: user.name, email: user.email },
+      userInfo: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
       token: token,
     },
   });

@@ -17,7 +17,7 @@ const userRouter = Router();
 
 userRouter.route('/signup').get().post(signup);
 userRouter.route('/login').get().post(login);
-userRouter.post('/logout', protectRoute, logout);
+userRouter.post('/logout', logout);
 
 userRouter.use(protectRoute);
 

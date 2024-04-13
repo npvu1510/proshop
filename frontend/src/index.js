@@ -29,10 +29,13 @@ import Payment from './pages/Payment';
 import PlaceOrder from './pages/PlaceOrder';
 import Order from './pages/Order';
 import Profile from './pages/Profile';
+import Orders from './pages/Orders';
+import Products from './pages/Products';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      {/* PUBLIC ROUTE */}
       <Route index element={<Home />} />
       <Route path="/product/:productId" element={<ProductDetail />} />
 
@@ -40,6 +43,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
+      {/* FOR USER ROUTE */}
       <Route path="" element={<ProtectRoute />}>
         <Route path="/shipping" element={<Shipping />} />
         <Route path="/payment" element={<Payment />} />
@@ -49,6 +53,12 @@ const router = createBrowserRouter(
         <Route path="/order/:id" element={<Order />} />
 
         <Route path="/profile" element={<Profile />} />
+      </Route>
+
+      {/* FOR ADMIN ROUTE */}
+      <Route path="" element={<ProtectRoute forAdmin={true} />}>
+        <Route path="/admin/products" element={<Products />} />
+        <Route path="/admin/orders" element={<Orders />} />
       </Route>
 
       <Route path="/test" element={<Test />} />
