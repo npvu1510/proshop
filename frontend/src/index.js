@@ -32,6 +32,8 @@ import Profile from './pages/Profile';
 import Orders from './pages/Orders';
 import Products from './pages/Products';
 
+import GlobalStyles from './GlobalStyles';
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -69,10 +71,13 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <PayPalScriptProvider deferLoading={true}>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </PayPalScriptProvider>
+  <>
+    <GlobalStyles />
+    <PayPalScriptProvider deferLoading={true}>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </PayPalScriptProvider>
+  </>
   // </React.StrictMode>
 );

@@ -11,8 +11,8 @@
     "server:prod": "cross-env NODE_ENV=production node ./backend/server.js",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "data:import": "node ./backend/data/seeder.js import",
-    "data:destroy": "node ./backend/data/seeder.js destroy"
+    "data:import": "node ./backend/seeder.js",
+    "data:destroy": "node ./backend/seeder.js -d"
   },
   "author": "Brad Traversy",
   "license": "MIT",

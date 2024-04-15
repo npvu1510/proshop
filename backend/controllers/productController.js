@@ -21,4 +21,64 @@ const getProductById = asyncHandler(async (req, res) => {
   throw new Error('Resource not found');
 });
 
-export { getProducts, getProductById };
+// @desc    Create a new product
+// @route   POST /api/products
+// @access  Private/admin
+const createProduct = asyncHandler(async (req, res) => {
+  const { name, brand, category, price, description, image } = req.body;
+
+  const product = new Product({
+    user: req.user._id,
+    name: name || 'Sample name',
+    brand: brand || 'Sample brand',
+    category: category || 'Sample category',
+    description: description || 'Sample description',
+    numReviews: 0,
+    price: price || 0,
+    countInStock: 0,
+
+    image: image || '/images/sample.jpg',
+  });
+
+  const newProduct = await product.save();
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      product: newProduct,
+    },
+  });
+});
+
+// @desc    Update a product
+// @route   PATCH /api/products/:id
+// @access  Private/admin
+const updateProduct = asyncHandler(async (req, res) => {
+  const { _id, name, brand, category, price, description, image } = req.body;
+
+  const product = await Product.findById(_id);
+  if (!product)
+    return res.status(404).json({
+      status: 'error',
+      error: 'Product not found',
+    });
+
+  product.name = name || product.name;
+  product.brand = brand || product.brand;
+  product.category = category || product.category;
+  product.description = description || product.description;
+  product.price = price || product.price;
+  // product.image = image || product.image;
+
+  const updatedProduct = await product.save();
+  console.log(updatedProduct);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      product: updatedProduct,
+    },
+  });
+});
+
+export { getProducts, getProductById, createProduct, updateProduct };

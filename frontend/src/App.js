@@ -1,6 +1,7 @@
 import { Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+// import styled from 'styled-components';
 
 import Header from './components/Header';
 import Footer from './components/Footer';

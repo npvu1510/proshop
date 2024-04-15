@@ -16,7 +16,7 @@ export const protectRoute = asyncHandler(async (req, res, next) => {
 });
 
 export const restrictToAdmin = (req, res, next) => {
-  if (!req.user.isAdmin) {
+  if (!req.user?.isAdmin) {
     return res.status(401).json({ error: 'Not authorized (only for admin)' });
   }
   next();
