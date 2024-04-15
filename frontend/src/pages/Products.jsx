@@ -1,4 +1,5 @@
-import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
 import {
   useGetProductsQuery,
   useDeleteProductMutation,
@@ -12,23 +13,16 @@ import { FaTrash, FaEdit, FaPlus } from 'react-icons/fa';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
+import ConfirmDelete from '../components/ConfirmDelete';
+
 import CreateProductModal from '../components/CreateProductModal';
-import toast from 'react-hot-toast';
 
 export const Products = () => {
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    formState: { errors },
-  } = useForm();
-
   const { data, isLoading: isQuerying, error, refetch } = useGetProductsQuery();
 
   const [deteteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const products = data?.data.products;
-  // console.log(isQuerying, products);
 
   const handleDelete = async (id) => {
     try {
@@ -92,19 +86,34 @@ export const Products = () => {
                         </Button>
                       </Modal.Trigger>
                     </LinkContainer>
-                    <Button
-                      variant="danger"
-                      className="btn-sm"
-                      onClick={() => handleDelete(product._id)}
+                    <Modal.Trigger
+                      triggerOf={`delete-product-${product._id}-modal`}
                     >
-                      <FaTrash style={{ color: 'white' }} />
-                    </Button>
+                      <Button
+                        variant="danger"
+                        className="btn-sm"
+                        onClick={() => handleDelete(product._id)}
+                        disabled={isDeleting}
+                      >
+                        <FaTrash style={{ color: 'white' }} />
+                      </Button>
+                    </Modal.Trigger>
                   </td>
 
                   <Modal.Window name={`edit-product-${product._id}-modal`}>
                     <CreateProductModal
                       refetch={refetch}
                       editProduct={product}
+                    />
+                  </Modal.Window>
+
+                  <Modal.Window name={`delete-product-${product._id}-modal`}>
+                    <ConfirmDelete
+                      resource="product"
+                      onConfirm={() => {
+                        handleDelete(product._id);
+                      }}
+                      disabled={isDeleting}
                     />
                   </Modal.Window>
                 </tr>
