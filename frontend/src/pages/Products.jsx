@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import {
   useGetProductsQuery,
-  useCreateProductMutation,
+  useDeleteProductMutation,
 } from '../slices/productApiSlice';
 
 import { Row, Col, Button, Table, Form } from 'react-bootstrap';
@@ -13,6 +13,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
 import CreateProductModal from '../components/CreateProductModal';
+import toast from 'react-hot-toast';
 
 export const Products = () => {
   const {
@@ -24,11 +25,21 @@ export const Products = () => {
 
   const { data, isLoading: isQuerying, error, refetch } = useGetProductsQuery();
 
-  const products = data?.data.products;
-  console.log(isQuerying, products);
+  const [deteteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
-  const handleDelete = (id) => {
-    console.log(id);
+  const products = data?.data.products;
+  // console.log(isQuerying, products);
+
+  const handleDelete = async (id) => {
+    try {
+      await deteteProduct(id).unwrap();
+
+      refetch();
+      toast.success(`Deleted product #${id}`);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.data.message || err.message);
+    }
   };
 
   return (

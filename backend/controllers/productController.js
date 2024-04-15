@@ -1,5 +1,6 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Product from '../models/productModel.js';
+import AppError from '../utils/AppError.js';
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -86,4 +87,25 @@ const updateProduct = asyncHandler(async (req, res) => {
   });
 });
 
-export { getProducts, getProductById, createProduct, updateProduct };
+// @desc    Delete a product
+// @route   DELETE /api/products/:id
+// @access  Private/admin
+const deleteProduct = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  console.log(id);
+  const product = await Product.findById(id);
+
+  if (!product) next(new AppError(404, 'Product not found'));
+
+  await Product.deleteOne({ _id: id });
+
+  res.status(200).json({ status: 'success' });
+});
+
+export {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};

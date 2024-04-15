@@ -12,9 +12,6 @@ import { getCart } from '../selectors';
 import { useLogoutMutation } from '../slices/userApiSlice';
 import userSlice from '../slices/userSlice';
 
-import Loader from './Loader';
-import { createPortal } from 'react-dom';
-
 const Header = () => {
   const dispatch = useDispatch();
   console.log('re-render Header');
@@ -22,7 +19,7 @@ const Header = () => {
   const cart = useSelector(getCart);
   const userInfo = useSelector(getUserInfo);
 
-  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
 
   const handleLogout = async () => {
     try {

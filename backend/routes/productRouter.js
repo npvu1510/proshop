@@ -6,6 +6,7 @@ import {
   getProductById,
   createProduct,
   updateProduct,
+  deleteProduct,
 } from '../controllers/productController.js';
 import upload from '../controllers/uploadController.js';
 
@@ -17,6 +18,9 @@ router
   .post(protectRoute, restrictToAdmin, createProduct)
   .patch(protectRoute, restrictToAdmin, upload.single('image'), updateProduct);
 
-router.route('/:id').get(getProductById);
+router
+  .route('/:id')
+  .get(getProductById)
+  .delete(protectRoute, restrictToAdmin, deleteProduct);
 
 export default router;
