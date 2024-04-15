@@ -1,5 +1,3 @@
-import styled, { css } from 'styled-components';
-
 import { useForm } from 'react-hook-form';
 import { Button } from 'react-bootstrap';
 import CustomForm from './CustomForm';
@@ -9,13 +7,14 @@ import {
   useUpdateProductMutation,
 } from '../slices/productApiSlice';
 
+// import { useUploadImageMutation } from '../slices/uploadSlice';
+
 import toast from 'react-hot-toast';
 
 import Loader from '../components/Loader';
 
 const CreateProductModal = ({ editProduct, onClose, refetch }) => {
   const isEditSession = Boolean(editProduct);
-  console.log(editProduct);
 
   const {
     register,
@@ -29,24 +28,34 @@ const CreateProductModal = ({ editProduct, onClose, refetch }) => {
   const onSubmit = async (data) => {
     try {
       if (!isEditSession) {
-        const res = await createProduct(data).unwrap();
-        console.log(res);
-
+        await createProduct(data).unwrap();
         toast.success('Create successfully');
         refetch();
         onClose();
       } else {
-        const res = await updateProduct({
-          ...data,
-          _id: editProduct._id,
-        }).unwrap();
+        const { name, brand, category, price, description, countInStock } =
+          data;
 
+        const formData = new FormData();
+        formData.append('_id', editProduct._id);
+        formData.append('name', name);
+        formData.append('brand', brand);
+        formData.append('category', category);
+        formData.append('price', price);
+        formData.append('description', description);
+        formData.append('countInStock', countInStock);
+
+        const image = data?.image[0];
+        if (image) formData.append('image', image);
+
+        await updateProduct(formData).unwrap();
         toast.success('Update successfully');
+
         refetch();
         onClose();
       }
     } catch (err) {
-      console.error(err);
+      console.log(err);
       toast.error(err?.data.message || err.message);
     }
   };
@@ -55,6 +64,21 @@ const CreateProductModal = ({ editProduct, onClose, refetch }) => {
     console.log(errors);
     console.log(err);
   };
+
+  const uploadHandler = async (e) => {
+    console.log(e.target.files[0]);
+    // try {
+    //   const formData = new FormData();
+    //   formData.append('image', e.target.files[0]);
+
+    //   const res = await uploadImage(formData).unwrap();
+    //   console.log(res);
+    // } catch (err) {
+    //   console.error(err);
+    //   toast.error(err?.data.message || err.message);
+    // }
+  };
+
   return (
     <>
       <h2 className="mb-5">{isEditSession ? `Edit product` : `New product`}</h2>
@@ -165,7 +189,11 @@ const CreateProductModal = ({ editProduct, onClose, refetch }) => {
         {isEditSession && (
           <CustomForm.Group controlId="formImage" className="mb-2">
             <CustomForm.Label>Image</CustomForm.Label>
-            <CustomForm.Control type="file" {...register('image')} />
+            <CustomForm.Control
+              type="file"
+              {...register('image')}
+              onChange={uploadHandler}
+            />
           </CustomForm.Group>
         )}
 

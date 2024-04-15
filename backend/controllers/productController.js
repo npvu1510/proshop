@@ -54,7 +54,8 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PATCH /api/products/:id
 // @access  Private/admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { _id, name, brand, category, price, description, image } = req.body;
+  const { _id, name, brand, category, price, description, countInStock } =
+    req.body;
 
   const product = await Product.findById(_id);
   if (!product)
@@ -68,10 +69,14 @@ const updateProduct = asyncHandler(async (req, res) => {
   product.category = category || product.category;
   product.description = description || product.description;
   product.price = price || product.price;
-  // product.image = image || product.image;
+  product.countInStock = countInStock || product.countInStock;
+
+  if (req.file) {
+    const ext = req.file.filename.split('.').at(-1);
+    product.image = `/uploads/product-${req.file.fieldname}-${_id}.${ext}`;
+  }
 
   const updatedProduct = await product.save();
-  console.log(updatedProduct);
 
   res.status(200).json({
     status: 'success',

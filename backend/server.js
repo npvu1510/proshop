@@ -1,7 +1,8 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
+import path from 'path';
 
+import dotenv from 'dotenv';
 dotenv.config();
 import connectDB from './config/db.js';
 
@@ -12,6 +13,7 @@ import productRouter from './routes/productRouter.js';
 import userRouter from './routes/userRouter.js';
 import orderRouter from './routes/orderRouter.js';
 import { protectRoute } from './middleware/authMiddleware.js';
+// import uploadRouter from './routes/uploadRouter.js';
 
 const port = process.env.PORT || 5000;
 
@@ -26,9 +28,16 @@ app.use(express.urlencoded({ extended: true }));
 // cookie parser middleware
 app.use(cookieParser());
 
+// static
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+console.log(process.env.NODE_ENV);
+
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
+// app.use('/api/uploads', uploadRouter);
 app.use('/api/paypal-client-id', protectRoute, (req, res) => {
   res.status(200).json({
     status: 'success',
@@ -41,7 +50,7 @@ app.get('/', (req, res) => {
 });
 
 app.all('*', (req, res, next) => {
-  console.log('hi');
+  // console.log('hi');
   next(new AppError(404, `${req.originalUrl} not found on server`));
 });
 app.use(errorHandler);

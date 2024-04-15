@@ -7,6 +7,7 @@ import {
   createProduct,
   updateProduct,
 } from '../controllers/productController.js';
+import upload from '../controllers/uploadController.js';
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router
   .route('/')
   .get(getProducts)
   .post(protectRoute, restrictToAdmin, createProduct)
-  .patch(protectRoute, restrictToAdmin, updateProduct);
+  .patch(protectRoute, restrictToAdmin, upload.single('image'), updateProduct);
 
 router.route('/:id').get(getProductById);
 
