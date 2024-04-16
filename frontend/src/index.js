@@ -31,6 +31,7 @@ import Order from './pages/Order';
 import Profile from './pages/Profile';
 import Orders from './pages/Orders';
 import Products from './pages/Products';
+import Users from './pages/Users';
 
 import GlobalStyles from './GlobalStyles';
 
@@ -61,6 +62,7 @@ const router = createBrowserRouter(
       <Route path="" element={<ProtectRoute forAdmin={true} />}>
         <Route path="/admin/products" element={<Products />} />
         <Route path="/admin/orders" element={<Orders />} />
+        <Route path="/admin/users" element={<Users />} />
       </Route>
 
       <Route path="/test" element={<Test />} />

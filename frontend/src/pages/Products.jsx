@@ -15,7 +15,7 @@ import Loader from '../components/Loader';
 import Modal from '../components/Modal';
 import ConfirmDelete from '../components/ConfirmDelete';
 
-import CreateProductModal from '../components/CreateProductModal';
+import ProductModal from '../components/ProductModal';
 
 export const Products = () => {
   const { data, isLoading: isQuerying, error, refetch } = useGetProductsQuery();
@@ -77,15 +77,14 @@ export const Products = () => {
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
-                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                      <Modal.Trigger
-                        triggerOf={`edit-product-${product._id}-modal`}
-                      >
-                        <Button variant="light" className="btn-sm mx-2">
-                          <FaEdit />
-                        </Button>
-                      </Modal.Trigger>
-                    </LinkContainer>
+                    <Modal.Trigger
+                      triggerOf={`edit-product-${product._id}-modal`}
+                    >
+                      <Button variant="light" className="btn-sm mx-2">
+                        <FaEdit />
+                      </Button>
+                    </Modal.Trigger>
+
                     <Modal.Trigger
                       triggerOf={`delete-product-${product._id}-modal`}
                     >
@@ -101,10 +100,7 @@ export const Products = () => {
                   </td>
 
                   <Modal.Window name={`edit-product-${product._id}-modal`}>
-                    <CreateProductModal
-                      refetch={refetch}
-                      editProduct={product}
-                    />
+                    <ProductModal refetch={refetch} editProduct={product} />
                   </Modal.Window>
 
                   <Modal.Window name={`delete-product-${product._id}-modal`}>
@@ -125,7 +121,7 @@ export const Products = () => {
       )}
 
       <Modal.Window name="create-product-modal">
-        <CreateProductModal refetch={refetch} />
+        <ProductModal refetch={refetch} />
       </Modal.Window>
     </Modal>
   );

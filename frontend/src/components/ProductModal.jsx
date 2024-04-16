@@ -11,9 +11,9 @@ import {
 
 import toast from 'react-hot-toast';
 
-import Loader from '../components/Loader';
+import Loader from './Loader';
 
-const CreateProductModal = ({ editProduct, onClose, refetch }) => {
+const ProductModal = ({ editProduct, onClose, refetch }) => {
   const isEditSession = Boolean(editProduct);
 
   const {
@@ -65,27 +65,10 @@ const CreateProductModal = ({ editProduct, onClose, refetch }) => {
     console.log(err);
   };
 
-  const uploadHandler = async (e) => {
-    console.log(e.target.files[0]);
-    // try {
-    //   const formData = new FormData();
-    //   formData.append('image', e.target.files[0]);
-
-    //   const res = await uploadImage(formData).unwrap();
-    //   console.log(res);
-    // } catch (err) {
-    //   console.error(err);
-    //   toast.error(err?.data.message || err.message);
-    // }
-  };
-
   return (
     <>
       <h2 className="mb-5">{isEditSession ? `Edit product` : `New product`}</h2>
-      <CustomForm
-        onSubmit={handleSubmit(onSubmit, onError)}
-        type={onClose ? 'modal' : 'regular'}
-      >
+      <CustomForm onSubmit={handleSubmit(onSubmit, onError)} type="modal">
         <CustomForm.Group className="mb-2" controlId="formProductName">
           <CustomForm.Label>Name</CustomForm.Label>
           <CustomForm.Control
@@ -189,11 +172,7 @@ const CreateProductModal = ({ editProduct, onClose, refetch }) => {
         {isEditSession && (
           <CustomForm.Group controlId="formImage" className="mb-2">
             <CustomForm.Label>Image</CustomForm.Label>
-            <CustomForm.Control
-              type="file"
-              {...register('image')}
-              onChange={uploadHandler}
-            />
+            <CustomForm.Control type="file" {...register('image')} />
           </CustomForm.Group>
         )}
 
@@ -212,4 +191,4 @@ const CreateProductModal = ({ editProduct, onClose, refetch }) => {
   );
 };
 
-export default CreateProductModal;
+export default ProductModal;
