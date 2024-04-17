@@ -1,15 +1,30 @@
+import { useSearchParams } from 'react-router-dom';
+
 import { Row, Col } from 'react-bootstrap';
 
 import Product from '../components/Product';
+import AppPagination from '../components/AppPagination';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 import { useGetProductsQuery } from '../slices/productApiSlice';
+import ProductCarousel from '../components/ProductCarousel';
 
 const Home = () => {
-  // console.log('rerender HOME');
-  const { data, isLoading, error } = useGetProductsQuery();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentPage = searchParams.get('page') * 1 || 1;
+  const search = searchParams.get('search') || '';
+
+  console.log('rerender HOMEPAGE PAGE ', search);
+
+  const { data, isLoading, error } = useGetProductsQuery({
+    page: currentPage,
+    search,
+  });
+  console.log(isLoading);
   const products = data?.data.products;
+  const totalPages = data?.data.totalPages;
 
   return (
     <>
@@ -19,6 +34,7 @@ const Home = () => {
         <Message variant="danger">{error.data.message}</Message>
       ) : (
         <>
+          {!search && <ProductCarousel />}
           <h1>Latest Products</h1>
           <Row>
             {products.map((product) => (
@@ -29,6 +45,7 @@ const Home = () => {
           </Row>
         </>
       )}
+      <AppPagination currentPage={1} totalPages={totalPages} />
     </>
   );
 };

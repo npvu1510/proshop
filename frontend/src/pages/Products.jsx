@@ -1,3 +1,5 @@
+import { useSearchParams } from 'react-router-dom';
+
 import toast from 'react-hot-toast';
 
 import {
@@ -5,8 +7,8 @@ import {
   useDeleteProductMutation,
 } from '../slices/productApiSlice';
 
-import { Row, Col, Button, Table, Form } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Row, Col, Button, Table } from 'react-bootstrap';
+// import { LinkContainer } from 'react-router-bootstrap';
 
 import { FaTrash, FaEdit, FaPlus } from 'react-icons/fa';
 
@@ -16,13 +18,24 @@ import Modal from '../components/Modal';
 import ConfirmDelete from '../components/ConfirmDelete';
 
 import ProductModal from '../components/ProductModal';
+import AppPagination from '../components/AppPagination';
 
 export const Products = () => {
-  const { data, isLoading: isQuerying, error, refetch } = useGetProductsQuery();
+  console.log('rerender Products');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = searchParams.get('page') * 1 || 1;
+
+  const {
+    data,
+    isLoading: isQuerying,
+    error,
+    refetch,
+  } = useGetProductsQuery({ page: currentPage, limit: 10 });
 
   const [deteteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const products = data?.data.products;
+  const totalPages = data?.data.totalPages;
 
   const handleDelete = async (id) => {
     try {
@@ -117,6 +130,7 @@ export const Products = () => {
             </tbody>
           </Table>
           {/* PAGINATE PLACEHOLDER */}
+          <AppPagination totalPages={totalPages} />
         </>
       )}
 

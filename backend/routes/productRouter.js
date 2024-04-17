@@ -4,6 +4,7 @@ import { protectRoute, restrictToAdmin } from '../middleware/authMiddleware.js';
 import {
   getProducts,
   getProductById,
+  getTopRatingProducts,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -11,6 +12,8 @@ import {
 import upload from '../controllers/uploadController.js';
 
 const router = express.Router();
+
+router.route('/top-3-rating').get(getTopRatingProducts);
 
 router
   .route('/')

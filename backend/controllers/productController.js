@@ -1,25 +1,46 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Product from '../models/productModel.js';
+
 import AppError from '../utils/AppError.js';
+import { PAGE_SIZE } from '../utils/constants.js';
 
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  res.status(200).json({ status: 'success', data: { products } });
+  const search = req.query.search || null;
+  const page = req.query.page || 1;
+  const limit = req.query.limit || PAGE_SIZE;
+  console.log(req.query);
+
+  let query = null;
+  const filter = search ? { $text: { $search: search } } : {};
+
+  query = Product.find(filter);
+  query.skip(limit * (page - 1));
+  query.limit(limit);
+
+  const products = await query;
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      products,
+      totalPages: Math.ceil((await Product.countDocuments(filter)) / limit),
+    },
+  });
 });
 
 // @desc    Fetch single product
 // @route   GET /api/products/:id
 // @access  Public
-const getProductById = asyncHandler(async (req, res) => {
+const getProductById = asyncHandler(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
   if (product) {
     return res.json(product);
   }
-  res.status(404);
-  throw new Error('Resource not found');
+
+  next(new AppError(404, 'Resource not found'));
 });
 
 // @desc    Create a new product
@@ -102,9 +123,24 @@ const deleteProduct = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: 'success' });
 });
 
+// @desc Get top 3 rating products
+// @route GET /api/products/top-3-rating
+// @access Public
+const getTopRatingProducts = asyncHandler(async (req, res) => {
+  const topProducts = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      products: topProducts,
+    },
+  });
+});
+
 export {
   getProducts,
   getProductById,
+  getTopRatingProducts,
   createProduct,
   updateProduct,
   deleteProduct,
