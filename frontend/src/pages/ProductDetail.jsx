@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 
 import { getUserInfo } from '../selectors';
 
@@ -89,6 +90,7 @@ function ProductDetails() {
         <Message variant="danger">Something went wrong</Message>
       ) : (
         <>
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />

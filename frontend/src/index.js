@@ -33,6 +33,8 @@ import Orders from './pages/Orders';
 import Products from './pages/Products';
 import Users from './pages/Users';
 
+import { HelmetProvider } from 'react-helmet-async';
+
 import GlobalStyles from './GlobalStyles';
 
 const router = createBrowserRouter(
@@ -73,13 +75,13 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <>
+  <HelmetProvider>
     <GlobalStyles />
     <PayPalScriptProvider deferLoading={true}>
       <Provider store={store}>
         <RouterProvider router={router} />
       </Provider>
     </PayPalScriptProvider>
-  </>
+  </HelmetProvider>
   // </React.StrictMode>
 );

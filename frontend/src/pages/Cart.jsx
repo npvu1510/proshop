@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { FaTrashAlt } from 'react-icons/fa';
 
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 
 import { getCart } from '../selectors';
 import cartSlice from '../slices/cartSlice';
@@ -38,6 +39,8 @@ const Cart = () => {
 
   return (
     <>
+      <Meta title="Cart" />
+
       <Link className="btn btn-light my-3" to={-1}>
         Go back
       </Link>

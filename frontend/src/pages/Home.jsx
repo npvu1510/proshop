@@ -6,6 +6,7 @@ import Product from '../components/Product';
 import AppPagination from '../components/AppPagination';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 
 import { useGetProductsQuery } from '../slices/productApiSlice';
 import ProductCarousel from '../components/ProductCarousel';
@@ -22,7 +23,7 @@ const Home = () => {
     page: currentPage,
     search,
   });
-  console.log(isLoading);
+  // console.log(isLoading);
   const products = data?.data.products;
   const totalPages = data?.data.totalPages;
 
@@ -34,6 +35,7 @@ const Home = () => {
         <Message variant="danger">{error.data.message}</Message>
       ) : (
         <>
+          <Meta />
           {!search && <ProductCarousel />}
           <h1>Latest Products</h1>
           <Row>

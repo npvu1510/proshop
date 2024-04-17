@@ -14,6 +14,7 @@ import { useGetMyOrdersQuery } from '../slices/orderApiSlice';
 
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 
 const Profile = () => {
   console.log('render Profile');
@@ -72,6 +73,7 @@ const Profile = () => {
 
   return (
     <>
+      <Meta title={userInfo.name} />
       <Row>
         <Col md={3}>
           <h2>Profile</h2>

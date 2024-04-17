@@ -18,6 +18,7 @@ import {
   usePayOrderMutation,
 } from '../slices/orderApiSlice';
 import { useGetPayPalClientIdQuery } from '../slices/paypalApiSlice';
+import Meta from '../components/Meta';
 
 const Order = () => {
   const { id } = useParams();
@@ -115,6 +116,7 @@ const Order = () => {
 
   return (
     <>
+      <Meta title={`Order #${id}`} />
       <h1>Order #{id}</h1>
       <Row>
         <Col md={8}>

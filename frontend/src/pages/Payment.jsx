@@ -7,6 +7,7 @@ import { Navigate } from 'react-router-dom';
 
 import Steps from '../components/Steps';
 import FormContainer from '../components/FormContainer';
+import Meta from '../components/Meta';
 
 import cartSlice from '../slices/cartSlice';
 import { getCart } from '../selectors';
@@ -27,35 +28,39 @@ const Payment = () => {
     return <Navigate to="/shipping" replace />;
 
   return (
-    <FormContainer>
-      <Steps currentStep={4} />
-      <Form onSubmit={handleSubmit(onConfirm)}>
-        <Form.Group>
-          <Form.Label as="legend">Select Method</Form.Label>
-          <Col>
-            <Form.Check
-              type="radio"
-              className="my-2"
-              label="PayPal or Credit Card"
-              value="PayPal"
-              {...register('paymentMethod')}
-            />
-            <Form.Check
-              type="radio"
-              className="my-2"
-              label="QR Pay"
-              value="QR"
-              {...register('paymentMethod')}
-              defaultChecked
-            />
-          </Col>
-        </Form.Group>
+    <>
+      <Meta title="Checkout" />
 
-        <Button type="submit" variant="primary">
-          Confirm
-        </Button>
-      </Form>
-    </FormContainer>
+      <FormContainer>
+        <Steps currentStep={4} />
+        <Form onSubmit={handleSubmit(onConfirm)}>
+          <Form.Group>
+            <Form.Label as="legend">Select Method</Form.Label>
+            <Col>
+              <Form.Check
+                type="radio"
+                className="my-2"
+                label="PayPal or Credit Card"
+                value="PayPal"
+                {...register('paymentMethod')}
+              />
+              <Form.Check
+                type="radio"
+                className="my-2"
+                label="QR Pay"
+                value="QR"
+                {...register('paymentMethod')}
+                defaultChecked
+              />
+            </Col>
+          </Form.Group>
+
+          <Button type="submit" variant="primary">
+            Confirm
+          </Button>
+        </Form>
+      </FormContainer>
+    </>
   );
 };
 

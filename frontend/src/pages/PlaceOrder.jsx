@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Steps from '../components/Steps';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Meta from '../components/Meta';
 
 import { getCart } from '../selectors';
 
@@ -61,6 +62,8 @@ const PlaceOrder = () => {
 
   return (
     <>
+      <Meta title="Checkout" />
+
       {isLoading && <Loader />}
       <Steps currentStep={5} />
 
