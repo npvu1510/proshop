@@ -96,8 +96,6 @@ export const updateUserProfile = asyncHandler(async (req, res, next) => {
 
   if (!user) next(new AppError(400, 'User not found'));
 
-  console.log(req.body);
-
   user.name = req.body.name || user.name;
   user.email = req.body.email || user.email;
   user.password = req.body.password || user.password;

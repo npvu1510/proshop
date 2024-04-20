@@ -15,7 +15,7 @@ import SearchBox from './SearchBox';
 
 const Header = () => {
   const dispatch = useDispatch();
-  console.log('re-render Header');
+  // console.log('re-render Header');
 
   const cart = useSelector(getCart);
   const userInfo = useSelector(getUserInfo);

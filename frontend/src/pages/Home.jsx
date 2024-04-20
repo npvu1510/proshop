@@ -12,12 +12,12 @@ import { useGetProductsQuery } from '../slices/productApiSlice';
 import ProductCarousel from '../components/ProductCarousel';
 
 const Home = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const currentPage = searchParams.get('page') * 1 || 1;
   const search = searchParams.get('search') || '';
 
-  console.log('rerender HOMEPAGE PAGE ', search);
+  // console.log('rerender HOMEPAGE PAGE ', search);
 
   const { data, isLoading, error } = useGetProductsQuery({
     page: currentPage,
@@ -32,7 +32,9 @@ const Home = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error.data.message}</Message>
+        <Message variant="danger">
+          {error?.data.message || error.message}
+        </Message>
       ) : (
         <>
           <Meta />

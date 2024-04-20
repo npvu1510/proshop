@@ -17,7 +17,7 @@ import Message from '../components/Message';
 import Meta from '../components/Meta';
 
 const Profile = () => {
-  console.log('render Profile');
+  // console.log('render Profile');
 
   const dispatch = useDispatch();
   const {
@@ -38,11 +38,7 @@ const Profile = () => {
   } = useGetMyOrdersQuery();
   const orders = data?.data.orders;
 
-  if (orders) {
-    console.log(orders.at(0).createdAt, typeof orders.at(0).createdAt);
-  }
-
-  console.log(orders, isFetchingOrders, fetchingOrdersError);
+  // console.log(orders, isFetchingOrders, fetchingOrdersError);
 
   const onSubmit = async ({ name, email, password, confirmPassword }) => {
     try {
@@ -52,7 +48,7 @@ const Profile = () => {
         password,
         confirmPassword,
       }).unwrap();
-      console.log(res);
+      // console.log(res);
 
       const { name: newName, email: newEmail } = res.data.user;
       dispatch(
@@ -68,7 +64,7 @@ const Profile = () => {
 
   const onError = (err) => {
     console.log(err);
-    console.log(errors);
+    // console.log(errors);
   };
 
   return (
@@ -108,15 +104,7 @@ const Profile = () => {
 
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                {...register('password', {
-                  required: {
-                    value: true,
-                    message: 'Password is required !',
-                  },
-                })}
-              />
+              <Form.Control type="password" {...register('password')} />
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -124,13 +112,11 @@ const Profile = () => {
               <Form.Control
                 type="password"
                 {...register('confirmPassword', {
-                  required: {
-                    value: true,
-                    message: 'Confirm password is required !',
-                  },
                   validate: (confirmPassword) =>
-                    confirmPassword === getValues().password ||
-                    'Password and confirm password do not match',
+                    getValues().password
+                      ? confirmPassword === getValues().password ||
+                        'Password and confirm password do not match'
+                      : true,
                 })}
               />
             </Form.Group>
@@ -156,7 +142,7 @@ const Profile = () => {
                 fetchingOrdersError.message}
             </Message>
           ) : (
-            <Table striped table hover responsive className="table-sm">
+            <Table striped hover responsive className="table-sm">
               <thead>
                 <tr>
                   <th>ID</th>

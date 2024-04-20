@@ -32,7 +32,7 @@ const Payment = () => {
       <Meta title="Checkout" />
 
       <FormContainer>
-        <Steps currentStep={4} />
+        <Steps currentStep={3} />
         <Form onSubmit={handleSubmit(onConfirm)}>
           <Form.Group>
             <Form.Label as="legend">Select Method</Form.Label>

@@ -35,12 +35,14 @@ const Order = () => {
     error: errorPayPal,
     isError: isErrorPayPal,
   } = useGetPayPalClientIdQuery();
+  // console.log(paypal, isLoadingPayPal, errorPayPal, isErrorPayPal);
 
-  const [payOrder, { isLoading: isPayingOrder }] = usePayOrderMutation();
+  const [payOrder] = usePayOrderMutation();
 
-  const [deliverOrder, { isLoading: isDelivering }] = useDeliverOrderMutation();
+  const [deliverOrder] = useDeliverOrderMutation();
 
   const [{ dispatch }] = usePayPalScriptReducer();
+
   useEffect(() => {
     if (!isLoadingPayPal || !errorPayPal) {
       const loadPayPalScript = async () => {
@@ -48,6 +50,7 @@ const Order = () => {
           type: 'resetOptions',
           value: {
             clientId: paypal.data.clientId,
+            currency: 'USD',
           },
         });
       };
@@ -61,6 +64,18 @@ const Order = () => {
   const isPreparing = isLoadingOrder || isLoadingPayPal;
 
   if (isPreparing) return <Loader />;
+
+  const createOrder = (data, actions) => {
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: order.totalPrice,
+          },
+        },
+      ],
+    });
+  };
 
   const onApprove = (data, actions) => {
     return actions.order
@@ -117,124 +132,137 @@ const Order = () => {
   return (
     <>
       <Meta title={`Order #${id}`} />
-      <h1>Order #{id}</h1>
-      <Row>
-        <Col md={8}>
-          <ListGroup variant="flush">
-            <ListGroup.Item>
-              <h2>Shipping</h2>
-
-              <p>
-                <strong>Name:</strong> {user.name}
-              </p>
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
-              <p>
-                <strong>Address</strong>{' '}
-                {`${order.shippingAddress.postalCode}, ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.country}`}
-              </p>
-
-              {order.isDelivered ? (
-                <Message variant="success">Delivered</Message>
-              ) : (
-                <Message variant="danger">Not Delivered</Message>
-              )}
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              <h2>Payment Method</h2>
-              <p>
-                <strong>Method:</strong> {order.paymentMethod}
-              </p>
-              {order.isPaid ? (
-                <Message variant="success">Paid on {order.paidAt}</Message>
-              ) : (
-                <Message variant="danger">Not Paid</Message>
-              )}
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              <h2>Items</h2>
+      {order ? (
+        <>
+          <h1>Order #{id}</h1>
+          <Row>
+            <Col md={8}>
               <ListGroup variant="flush">
-                {order.orderItems.map((item) => (
-                  <ListGroup.Item key={item._id}>
+                <ListGroup.Item>
+                  <h2>Shipping</h2>
+
+                  <p>
+                    <strong>Name:</strong> {user.name}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {user.email}
+                  </p>
+                  <p>
+                    <strong>Address</strong>{' '}
+                    {`${order.shippingAddress.postalCode}, ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.country}`}
+                  </p>
+
+                  {order.isDelivered ? (
+                    <Message variant="success">Delivered</Message>
+                  ) : (
+                    <Message variant="danger">Not Delivered</Message>
+                  )}
+                </ListGroup.Item>
+
+                <ListGroup.Item>
+                  <h2>Payment Method</h2>
+                  <p>
+                    <strong>Method:</strong> {order.paymentMethod}
+                  </p>
+                  {order.isPaid ? (
+                    <Message variant="success">Paid on {order.paidAt}</Message>
+                  ) : (
+                    <Message variant="danger">Not Paid</Message>
+                  )}
+                </ListGroup.Item>
+
+                <ListGroup.Item>
+                  <h2>Items</h2>
+                  <ListGroup variant="flush">
+                    {order.orderItems.map((item) => (
+                      <ListGroup.Item key={item._id}>
+                        <Row>
+                          <Col md={1}>
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              fluid
+                              rounded
+                            />
+                          </Col>
+
+                          <Col>
+                            <Link to={`/products/${item.product}`}>
+                              {item.name}
+                            </Link>
+                          </Col>
+
+                          <Col md={4}>
+                            {item.qty} x ${item.price} = $
+                            {item.qty * item.price}
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </ListGroup.Item>
+              </ListGroup>
+            </Col>
+            <Col md={4}>
+              <Card>
+                <ListGroup variant="flush">
+                  <ListGroup.Item>
+                    <h2>Order Summary</h2>
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
                     <Row>
-                      <Col md={1}>
-                        <Image src={item.image} alt={item.name} fluid rounded />
-                      </Col>
-
-                      <Col>
-                        <Link to={`/products/${item.product}`}>
-                          {item.name}
-                        </Link>
-                      </Col>
-
-                      <Col md={4}>
-                        {item.qty} x ${item.price} = ${item.qty * item.price}
-                      </Col>
+                      <Col>Items</Col>
+                      <Col>${order.itemsPrice}</Col>
+                    </Row>
+                    <Row>
+                      <Col>Shipping</Col>
+                      <Col>${order.shippingPrice}</Col>
+                    </Row>
+                    <Row>
+                      <Col>Tax</Col>
+                      <Col>${order.taxPrice}</Col>
+                    </Row>
+                    <Row>
+                      <Col>Total</Col>
+                      <Col>${order.totalPrice}</Col>
                     </Row>
                   </ListGroup.Item>
-                ))}
-              </ListGroup>
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <h2>Order Summary</h2>
-              </ListGroup.Item>
 
-              <ListGroup.Item>
-                <Row>
-                  <Col>Items</Col>
-                  <Col>${order.itemsPrice}</Col>
-                </Row>
-                <Row>
-                  <Col>Shipping</Col>
-                  <Col>${order.shippingPrice}</Col>
-                </Row>
-                <Row>
-                  <Col>Tax</Col>
-                  <Col>${order.taxPrice}</Col>
-                </Row>
-                <Row>
-                  <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-
-              {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                <Button
-                  className="btn"
-                  variant="primary"
-                  onClick={handleDeliver}
-                >
-                  Mark as delivered
-                </Button>
-              )}
-              {!order.isPaid && (
-                <ListGroup.Item>
-                  {/* <Button
+                  {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                    <Button
+                      className="btn"
+                      variant="primary"
+                      onClick={handleDeliver}
+                    >
+                      Mark as delivered
+                    </Button>
+                  )}
+                  {!order.isPaid && (
+                    <ListGroup.Item>
+                      {/* <Button
                     className="btn-block"
                     variant="primary"
                     onClick={handlePay}
                   >
                     Pay now
                   </Button> */}
-                  <PayPalButtons
-                    onApprove={onApprove}
-                    onError={onError}
-                    onCancel={onCancel}
-                  />
-                </ListGroup.Item>
-              )}
-            </ListGroup>
-          </Card>
-        </Col>
-      </Row>
+                      <PayPalButtons
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        onError={onError}
+                        onCancel={onCancel}
+                      />
+                    </ListGroup.Item>
+                  )}
+                </ListGroup>
+              </Card>
+            </Col>
+          </Row>
+        </>
+      ) : (
+        <Message>Order not found</Message>
+      )}
     </>
   );
 };

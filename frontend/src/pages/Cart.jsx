@@ -27,7 +27,7 @@ const Cart = () => {
   // const cartItems = useSelector(getCartItems);
   const cart = useSelector(getCart);
   const cartItems = cart.cartItems;
-  console.log(cart);
+  // console.log(cart);
 
   const handleQtyChange = (product) => {
     dispatch(cartSlice.actions.addToCart(product));
@@ -126,7 +126,7 @@ const Cart = () => {
 
                 <ListGroup.Item>
                   <LinkContainer to="/shipping">
-                    <Button type="button" classname="button-block">
+                    <Button type="button" className="button-block">
                       Proceed to checkout
                     </Button>
                   </LinkContainer>

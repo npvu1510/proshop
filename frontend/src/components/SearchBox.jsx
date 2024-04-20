@@ -5,28 +5,8 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const SearchBox = () => {
-  console.log('RERENDER SEARCHBOX');
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [setSearchParams] = useSearchParams();
   const [search, setSearch] = useState('');
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm();
-
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  // };
-
-  // const onError = (err) => {
-  //   console.log(err);
-  // };
-
-  // useEffect(() => {
-  //   console.log('rerender');
-  // }, [register]);
 
   return (
     // onSubmit={handleSubmit(onSubmit, onError)}
@@ -36,7 +16,6 @@ const SearchBox = () => {
         name="search"
         value={search}
         onChange={(e) => {
-          console.log(e.target.value);
           setSearch(e.target.value);
           setSearchParams({ search: e.target.value });
         }}

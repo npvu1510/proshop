@@ -11,7 +11,6 @@ const ProductCarousel = () => {
   const { data, isLoading, error } = useGetTopRatingProductsQuery();
   const topProducts = data?.data?.products;
 
-  console.log(topProducts);
   return (
     <>
       {isLoading ? (

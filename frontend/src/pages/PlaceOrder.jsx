@@ -49,10 +49,11 @@ const PlaceOrder = () => {
 
       const res = await createOrder(order).unwrap();
       dispatch(cartSlice.actions.clearCart());
-      navigate(`/order/${res.data.newOrder._id}`);
+      console.log(res);
+      navigate(`/order/${res.data.order._id}`);
     } catch (err) {
       console.error(err);
-      toast.error(err.data.message);
+      toast.error(err?.data.message || err.message);
     }
   };
 
@@ -65,7 +66,7 @@ const PlaceOrder = () => {
       <Meta title="Checkout" />
 
       {isLoading && <Loader />}
-      <Steps currentStep={5} />
+      <Steps currentStep={4} />
 
       <Row>
         <Col md={8}>

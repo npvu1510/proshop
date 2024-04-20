@@ -1,6 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import morgan from 'morgan';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -9,11 +10,12 @@ import connectDB from './config/db.js';
 import AppError from './utils/AppError.js';
 import errorHandler from './middleware/errorMiddleware.js';
 
+import { protectRoute } from './middleware/authMiddleware.js';
 import productRouter from './routes/productRouter.js';
 import userRouter from './routes/userRouter.js';
 import orderRouter from './routes/orderRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
-import { protectRoute } from './middleware/authMiddleware.js';
+import testRouter from './routes/testRouter.js';
 // import uploadRouter from './routes/uploadRouter.js';
 
 const port = process.env.PORT || 5000;
@@ -21,6 +23,9 @@ const port = process.env.PORT || 5000;
 connectDB();
 
 const app = express();
+
+// log
+app.use(morgan('dev'));
 
 // body parser middleware
 app.use(express.json());
@@ -39,6 +44,7 @@ app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/reviews', reviewRouter);
+app.use('/api/tests', testRouter);
 // app.use('/api/uploads', uploadRouter);
 app.use('/api/paypal-client-id', protectRoute, (req, res) => {
   res.status(200).json({

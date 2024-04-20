@@ -11,7 +11,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      console.log(action.payload.userInfo);
       if (action.payload.userInfo) state.userInfo = action.payload.userInfo;
 
       if (action.payload.token) state.token = action.payload.token;

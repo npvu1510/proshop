@@ -6,7 +6,7 @@ const initialState = localStorage.getItem('cart')
 // console.log(initialState);
 
 const formatCurrency = (num) => {
-  return num.toFixed(2);
+  return (Math.round(num * 100) / 100).toFixed(2);
 };
 
 const cartSlice = createSlice({
@@ -25,7 +25,7 @@ const cartSlice = createSlice({
       else state.cartItems.push(action.payload);
 
       const itemsPrice = state.cartItems.reduce(
-        (acc, currItem) => acc + currItem.price * currItem.qty,
+        (acc, item) => acc + (item.price * 100 * item.qty) / 100,
         0
       );
       state.itemsPrice = formatCurrency(itemsPrice);
@@ -33,7 +33,7 @@ const cartSlice = createSlice({
       const shippingPrice = state.itemsPrice > 100 ? 0 : 10;
       state.shippingPrice = formatCurrency(shippingPrice);
 
-      const taxPrice = itemsPrice + shippingPrice;
+      const taxPrice = 0.15 * itemsPrice;
       state.taxPrice = formatCurrency(taxPrice);
 
       const totalPrice = itemsPrice + shippingPrice + taxPrice;
