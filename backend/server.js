@@ -15,7 +15,6 @@ import productRouter from './routes/productRouter.js';
 import userRouter from './routes/userRouter.js';
 import orderRouter from './routes/orderRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
-import testRouter from './routes/testRouter.js';
 // import uploadRouter from './routes/uploadRouter.js';
 
 const port = process.env.PORT || 5000;
@@ -44,7 +43,6 @@ app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/reviews', reviewRouter);
-app.use('/api/tests', testRouter);
 // app.use('/api/uploads', uploadRouter);
 app.use('/api/paypal-client-id', protectRoute, (req, res) => {
   res.status(200).json({
