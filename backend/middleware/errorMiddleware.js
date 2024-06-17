@@ -24,7 +24,7 @@
 
 const resDev = (res, err) => {
   console.log('ERROR FROM DEV');
-  console.error(err);
+  // console.error(err);
 
   res.status(err.statusCode).json({
     status: err.status,
@@ -35,7 +35,7 @@ const resDev = (res, err) => {
 };
 const resProd = (res, err) => {
   console.log('ERROR FROM PROD');
-  console.error(err);
+  // console.error(err);
 
   if (err.isOperational) {
     res.status(err.statusCode).json({

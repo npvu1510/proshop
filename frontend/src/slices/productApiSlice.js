@@ -1,7 +1,7 @@
 import { PRODUCTS_URL } from '../constants';
 import apiSlice from './apiSlice';
 
-export const productSlice = apiSlice.injectEndpoints({
+export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (data) => ({
@@ -20,17 +20,18 @@ export const productSlice = apiSlice.injectEndpoints({
     }),
 
     getProductDetails: builder.query({
-      query: (productId) => ({
+      query: ({ productId, ...params }) => ({
         url: `${PRODUCTS_URL}/${productId}`,
+        params,
       }),
-      keepUnusedDataFor: 5,
+      keepUnusedDataFor: 0,
     }),
 
     createProduct: builder.mutation({
       query: (product) => ({
         url: PRODUCTS_URL,
         method: 'POST',
-        body: product,
+        data: product,
       }),
     }),
 
@@ -38,7 +39,7 @@ export const productSlice = apiSlice.injectEndpoints({
       query: (product) => ({
         url: PRODUCTS_URL,
         method: 'PATCH',
-        body: product,
+        data: product,
       }),
     }),
 
@@ -58,4 +59,4 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
-} = productSlice;
+} = productApiSlice;

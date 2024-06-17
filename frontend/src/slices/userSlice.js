@@ -10,20 +10,17 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setCredentials: (state, action) => {
-      if (action.payload.userInfo) state.userInfo = action.payload.userInfo;
-
-      if (action.payload.token) state.token = action.payload.token;
+    setUserInfo: (state, action) => {
+      if (action.payload) state.info = action.payload;
       localStorage.setItem('user', JSON.stringify(state));
     },
 
-    removeUser: (state, action) => {
-      state.userInfo = null;
-      state.token = null;
-      localStorage.setItem('user', JSON.stringify(state));
+    removeUserInfo: (state, action) => {
+      state.info = null;
+      localStorage.removeItem('user');
     },
   },
 });
 
 export default userSlice;
-export const { setCredentials } = userSlice.actions;
+export const { setUserInfo: setCredentials } = userSlice.actions;

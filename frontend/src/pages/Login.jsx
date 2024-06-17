@@ -9,14 +9,17 @@ import { Navigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 
-import { useLoginMutation } from '../slices/userApiSlice';
+import { useLoginMutation } from '../slices/authApiSlice';
 import userSlice from '../slices/userSlice';
 import { getUserInfo } from '../selectors';
 
 const Login = () => {
   const dispatch = useDispatch();
+
+  // AUTHENTICATION
   const userInfo = useSelector(getUserInfo);
 
+  // REACT HOOK FORM
   const {
     register,
     handleSubmit,
@@ -28,7 +31,8 @@ const Login = () => {
   const onSubmit = async ({ email, password }) => {
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(userSlice.actions.setCredentials(res.data));
+      console.log(res);
+      dispatch(userSlice.actions.setUserInfo(res.user));
       toast.success('Login successfully', { duration: 1000 });
     } catch (err) {
       console.log(err);

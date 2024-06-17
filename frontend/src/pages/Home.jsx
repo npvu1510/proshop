@@ -1,56 +1,113 @@
 import { useSearchParams } from 'react-router-dom';
+import { useGetProductsQuery } from '../slices/productApiSlice';
 
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Accordion } from 'react-bootstrap';
 
 import Product from '../components/Product';
 import AppPagination from '../components/AppPagination';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Meta from '../components/Meta';
+import ProductFilter from '../components/ProductFilter';
 
-import { useGetProductsQuery } from '../slices/productApiSlice';
 import ProductCarousel from '../components/ProductCarousel';
+import { useSelector } from 'react-redux';
+import {
+  getCategoriesFilter,
+  getPriceRangeFilter,
+  getStatusFilter,
+} from '../selectors';
+import { useCallback, useEffect, useState } from 'react';
+import { debounce } from 'lodash';
 
 const Home = () => {
   const [searchParams] = useSearchParams();
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState(null);
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(null);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
-  const currentPage = searchParams.get('page') * 1 || 1;
+  // search
   const search = searchParams.get('search') || '';
 
-  // console.log('rerender HOMEPAGE PAGE ', search);
+  // categories filter
+  const categories = useSelector(getCategoriesFilter);
 
-  const { data, isLoading, error } = useGetProductsQuery({
+  // price range filter
+  const [minPrice, maxPrice] = useSelector(getPriceRangeFilter);
+
+  // status
+  const status = useSelector(getStatusFilter);
+
+  // pagination
+  const currentPage = parseInt(searchParams.get('page'), 10) || 1;
+
+  // Debounce function for search and price filter
+
+  const [isLoadingDebounce, setIsLoadingDebounce] = useState(false);
+  const debounceFetch = useCallback(
+    debounce((minPrice, maxPrice, search) => {
+      setDebouncedMinPrice(minPrice);
+      setDebouncedMaxPrice(maxPrice);
+      setDebouncedSearch(search);
+      setIsLoadingDebounce(false);
+    }, 200),
+    [] // Adjust the delay as needed
+  );
+
+  useEffect(() => {
+    setIsLoadingDebounce(true);
+    debounceFetch(minPrice, maxPrice, search);
+  }, [minPrice, maxPrice, search, debounceFetch]);
+
+  const { data, isFetching, error } = useGetProductsQuery({
+    search: debouncedSearch,
+    categories,
+    minPrice: debouncedMinPrice,
+    maxPrice: debouncedMaxPrice,
+    status,
     page: currentPage,
-    search,
   });
-  // console.log(isLoading);
+
   const products = data?.data.products;
   const totalPages = data?.data.totalPages;
 
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">
-          {error?.data.message || error.message}
-        </Message>
-      ) : (
-        <>
-          <Meta />
-          {!search && <ProductCarousel />}
-          <h1>Latest Products</h1>
-          <Row>
-            {products.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
-        </>
-      )}
-      <AppPagination currentPage={1} totalPages={totalPages} />
+      <Meta />
+      {!search && <ProductCarousel />}
+      <h1>Products</h1>
+
+      <Row>
+        <Col xl={3} lg={4} md={5} sm={12}>
+          <Accordion defaultActiveKey="0">
+            <ProductFilter className={'mt-3'} />
+          </Accordion>
+        </Col>
+        {(isFetching || isLoadingDebounce) && <Loader />}
+        {!isFetching ||
+          (error && (
+            <Message variant="danger">
+              {error?.data.message || error.message}
+            </Message>
+          ))}
+
+        {!isFetching && !isLoadingDebounce && products && (
+          <>
+            <Col xl={9} lg={8} md={7} sm={12}>
+              <Row>
+                {products.map((product) => (
+                  <Col key={product._id} sm={6} md={12} lg={6} xl={4}>
+                    <Product product={product} />
+                  </Col>
+                ))}
+              </Row>
+            </Col>
+            <AppPagination totalPages={totalPages} />
+          </>
+        )}
+      </Row>
     </>
   );
 };
+
 export default Home;

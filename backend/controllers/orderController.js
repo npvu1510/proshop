@@ -10,18 +10,18 @@ import { verifyPayPalPayment, checkIfNewTransaction } from '../utils/paypal.js';
 // @desc    Create a new Order
 // @route   POST /api/orders
 // @access  Private
-export const createOrder = asyncHandler(async (req, res) => {
+export const createOrder = asyncHandler(async (req, res, next) => {
+  // console.log(req.body);
   const { orderItems, shippingAddress, paymentMethod } = req.body;
 
-  if (orderItems && orderItems.length === 0) {
-    res.status(400);
-    throw new Error('No order items');
-  } else {
+  if (!orderItems || orderItems.length === 0)
+    return next(new AppError(400, 'No order items'));
+  else {
     // get the ordered items from our database
     const itemsFromDB = await Product.find({
       _id: { $in: orderItems.map((x) => x._id) },
     });
-    console.log(itemsFromDB);
+    // console.log(itemsFromDB);
 
     // map over the order items and use the price from our items from database
     const dbOrderItems = orderItems.map((itemFromClient) => {
@@ -35,7 +35,7 @@ export const createOrder = asyncHandler(async (req, res) => {
         _id: undefined,
       };
     });
-    console.log(dbOrderItems);
+    // console.log(dbOrderItems);
 
     // calculate prices
     const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
@@ -63,7 +63,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 // @access  Private
 export const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
-  console.log(orders);
+  // console.log(orders);
   if (!orders || orders.length === 0)
     throw new AppError(404, 'Orders not found');
 
@@ -111,7 +111,7 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
   console.log(order.totalPrice, value);
   if (order) {
     // check the correct amount was paid
-    const paidCorrectAmount = order.totalPrice.toString() === value;
+    const paidCorrectAmount = order.totalPrice.toString() * 1 === value * 1;
     if (!paidCorrectAmount) throw new Error('Incorrect amount paid');
 
     order.isPaid = true;

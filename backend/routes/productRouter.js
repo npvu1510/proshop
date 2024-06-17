@@ -23,7 +23,7 @@ router
 
 router
   .route('/:id')
-  .get(getProductById)
+  .get(protectRoute, getProductById)
   .delete(protectRoute, restrictToAdmin, deleteProduct);
 
 export default router;

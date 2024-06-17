@@ -32,6 +32,8 @@ const PlaceOrder = () => {
     totalPrice,
   } = useSelector(getCart);
 
+  console.log(cartItems);
+
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
   const handleCreateOrder = async () => {
@@ -47,9 +49,11 @@ const PlaceOrder = () => {
         totalPrice,
       };
 
+      console.log(order);
+
       const res = await createOrder(order).unwrap();
       dispatch(cartSlice.actions.clearCart());
-      console.log(res);
+      // console.log(res);
       navigate(`/order/${res.data.order._id}`);
     } catch (err) {
       console.error(err);
@@ -106,9 +110,7 @@ const PlaceOrder = () => {
                         </Col>
 
                         <Col>
-                          <Link to={`/products/${item.product}`}>
-                            {item.name}
-                          </Link>
+                          <Link to={`/products/${item._id}`}>{item.name}</Link>
                         </Col>
 
                         <Col md={4}>

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import AppError from '../utils/AppError.js';
 
 const orderSchema = mongoose.Schema(
   {
@@ -77,6 +78,86 @@ const orderSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+// virtual
+
+// query middleware
+
+async function processOrder(order, ProductModel) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    for (const item of order.orderItems) {
+      const productId = item.product;
+      const qty = item.qty;
+
+      // Sử dụng findOneAndUpdate với điều kiện để đảm bảo số lượng sản phẩm không âm
+      const product = await ProductModel.findOneAndUpdate(
+        { _id: productId, countInStock: { $gte: qty } },
+        { $inc: { countInStock: -qty } },
+        { new: true, session }
+      );
+
+      if (!product) {
+        throw new Error(`Not enough stock for product ${productId}`);
+      }
+    }
+
+    await session.commitTransaction();
+    console.log('Số lượng sản phẩm đã được cập nhật thành công.');
+    session.endSession();
+  } catch (err) {
+    await session.abortTransaction();
+    session.endSession();
+    console.error('Lỗi khi cập nhật số lượng sản phẩm:', err);
+
+    // // Xóa đơn hàng nếu giao dịch không thành công
+    // await Order.findByIdAndRemove(order._id);
+    throw err;
+  }
+}
+
+// document middleware
+orderSchema.pre('save', async function (next) {
+  // this.isNewOrder = this.isNew;
+  if (!this.isNew) return;
+  // console.log('ĐÂY LÀ ORDER MỚI');
+  const ProductModel = this.model('Product');
+
+  const maxRetries = 100;
+  let attempt = 0;
+
+  while (attempt < maxRetries) {
+    try {
+      await processOrder(this, ProductModel);
+      break; // Thoát vòng lặp nếu thành công
+    } catch (err) {
+      if (err.message.includes('Write conflict')) {
+        attempt++;
+        if (attempt < maxRetries) {
+          console.log(`Retrying operation (${attempt}/${maxRetries})...`);
+        } else {
+          console.error('Max retries reached. Operation failed.');
+          throw err;
+        }
+      } else {
+        console.error('Lỗi khác:', err);
+
+        return next(new AppError(422, err.message));
+      }
+    }
+  }
+});
+
+// orderSchema.post('save', async function () {
+//   if (!this.isNewOrder) return;
+
+// });
+
+// method
+
+// static
 
 const Order = mongoose.model('Order', orderSchema);
 

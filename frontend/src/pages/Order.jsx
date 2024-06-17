@@ -111,7 +111,13 @@ const Order = () => {
   };
 
   const onError = (error) => {
-    toast.error(error?.data?.message || error.message);
+    console.log('from error');
+    if (
+      error?.data?.message === 'Detected popup close' ||
+      error.message === 'Detected popup close'
+    )
+      toast.error('Payment has not been made');
+    else toast.error(error?.data?.message || error.message);
   };
 
   const onCancel = (data, actions) => {

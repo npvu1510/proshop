@@ -7,20 +7,30 @@ import {
   useUpdateProductMutation,
 } from '../slices/productApiSlice';
 
+import { useGetCategoriesQuery } from '../slices/categoryApiSlice';
+
 // import { useUploadImageMutation } from '../slices/uploadSlice';
 
 import toast from 'react-hot-toast';
 
 import Loader from './Loader';
+import { useEffect, useState } from 'react';
 
 const ProductModal = ({ editProduct, onClose, refetch }) => {
-  const isEditSession = Boolean(editProduct);
-
   const {
     register,
+    watch,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const isEditSession = Boolean(editProduct);
+
+  const categoryQuery = useGetCategoriesQuery();
+  const categoriesForDisplay = categoryQuery.data?.categories
+    ? [{ name: 'Other' }, ...categoryQuery.data?.categories]
+    : null;
 
   const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
@@ -28,6 +38,7 @@ const ProductModal = ({ editProduct, onClose, refetch }) => {
   const onSubmit = async (data) => {
     try {
       if (!isEditSession) {
+        if (data.category === 'Other') data.category = data.newCategory;
         await createProduct(data).unwrap();
         toast.success('Create successfully');
         refetch();
@@ -38,9 +49,13 @@ const ProductModal = ({ editProduct, onClose, refetch }) => {
 
         const formData = new FormData();
         formData.append('_id', editProduct._id);
+        formData.append('originalCategory', editProduct.category);
         formData.append('name', name);
-        formData.append('brand', brand);
-        formData.append('category', category);
+        // formData.append('brand', brand);
+        formData.append(
+          'category',
+          category === 'Other' ? data.newCategory : category
+        );
         formData.append('price', price);
         formData.append('description', description);
         formData.append('countInStock', countInStock);
@@ -65,6 +80,18 @@ const ProductModal = ({ editProduct, onClose, refetch }) => {
     console.log(err);
   };
 
+  // other
+  const [isOtherCategory, setIsOtherCategory] = useState(true);
+  const categoryChoice = watch('category');
+
+  useEffect(() => {
+    if (categoryChoice === 'Other') {
+      setIsOtherCategory(true);
+    } else {
+      setIsOtherCategory(false);
+    }
+  }, [categoryChoice]);
+
   return (
     <>
       <h2 className="mb-5">{isEditSession ? `Edit product` : `New product`}</h2>
@@ -84,7 +111,7 @@ const ProductModal = ({ editProduct, onClose, refetch }) => {
           />
         </CustomForm.Group>
 
-        <CustomForm.Group className="mb-2" controlId="formBrand">
+        {/* <CustomForm.Group className="mb-2" controlId="formBrand">
           <CustomForm.Label>Brand</CustomForm.Label>
           <CustomForm.Control
             as="select"
@@ -101,26 +128,56 @@ const ProductModal = ({ editProduct, onClose, refetch }) => {
             <option value="Adidas">Adidas</option>
             <option value="Apple">Apple</option>
           </CustomForm.Control>
-        </CustomForm.Group>
+        </CustomForm.Group> */}
 
-        <CustomForm.Group className="mb-2" controlId="formCategory">
-          <CustomForm.Label>Category</CustomForm.Label>
-          <CustomForm.Control
-            as="select"
-            {...register('category', {
-              required: {
-                value: true,
-                message: 'Category is required !',
-              },
-            })}
-            {...(editProduct && { defaultValue: editProduct.category })}
-          >
-            <option>Select Category</option>
-            <option value="Clothes">Clothes</option>
-            <option value="Shoes">Shoes</option>
-            <option value="Electronics">Electronics</option>
-          </CustomForm.Control>
-        </CustomForm.Group>
+        {editProduct && categoriesForDisplay && (
+          <CustomForm.Group className="mb-2" controlId="formCategory">
+            <CustomForm.Label>Category</CustomForm.Label>
+
+            <CustomForm.Control
+              as="select"
+              {...register('category', {
+                required: {
+                  value: true,
+                  message: 'Category is required !',
+                },
+              })}
+              defaultValue={editProduct.category}
+            >
+              {categoriesForDisplay.map((category, idx) => (
+                <option
+                  key={idx}
+                  value={category.name}
+                  style={
+                    editProduct.category === category.name
+                      ? {
+                          backgroundColor: '#3c4c5d',
+                          color: '#fff',
+                          fontWeight: 'bold',
+                        }
+                      : {}
+                  }
+                >
+                  {category.name}
+                </option>
+              ))}
+            </CustomForm.Control>
+
+            {isOtherCategory && (
+              <CustomForm.Control
+                type="text"
+                placeholder="Enter new category..."
+                {...register('newCategory', {
+                  required: {
+                    value: true,
+                    message: 'Category is required!',
+                  },
+                })}
+              />
+            )}
+            {errors.category && <p>{errors.category.message}</p>}
+          </CustomForm.Group>
+        )}
 
         <CustomForm.Group className="mb-2" controlId="formPrice">
           <CustomForm.Label>Price</CustomForm.Label>

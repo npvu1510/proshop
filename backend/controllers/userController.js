@@ -3,78 +3,6 @@ import AppError from '../utils/AppError.js';
 
 import User from '../models/userModel.js';
 
-import generateToken from '../utils/generateToken.js';
-
-// @desc    register
-// @route   GET /api/users/signup
-// @access  Public
-export const signup = asyncHandler(async (req, res, next) => {
-  const { name, email, password } = req.body;
-  if (await User.findOne({ email })) {
-    next(new AppError(400, 'User already exists'));
-  }
-
-  const user = await User.create({ name, email, password });
-
-  const token = generateToken(res, { _id: user._id });
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      userInfo: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      },
-      token: token,
-    },
-  });
-});
-
-// @desc    auth user and provide jwt
-// @route   GET /api/users/login
-// @access  Public
-export const login = asyncHandler(async (req, res, next) => {
-  // console.log(req.body);
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    next(new AppError(400, 'Please provide email and password'));
-  }
-
-  const user = await User.findOne({ email });
-  if (!user) next(new AppError(401, `Account does not exist `));
-
-  if (!(await user.checkPassword(password)))
-    // next(new Error(`Password is wrong`);
-    next(new AppError(401, `Password is wrong`));
-
-  const token = generateToken(res, { _id: user._id });
-  res.status(200).json({
-    status: 'success',
-    data: {
-      userInfo: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      },
-      token: token,
-    },
-  });
-});
-
-// @desc    logout
-// @route   POST /api/users/logout
-// @access  Public
-export const logout = (req, res, next) => {
-  res
-    .cookie('jwt', '', { maxAge: 1 })
-    .status(200)
-    .json({ status: 'success', message: 'User logged out' });
-};
-
 // @desc    get user profile
 // @route   GET /api/users/profile
 // @access  Private
@@ -96,9 +24,11 @@ export const updateUserProfile = asyncHandler(async (req, res, next) => {
 
   if (!user) next(new AppError(400, 'User not found'));
 
+  console.log(user);
   user.name = req.body.name || user.name;
   user.email = req.body.email || user.email;
   user.password = req.body.password || user.password;
+  console.log(user);
 
   const updatedUser = await user.save();
 

@@ -77,7 +77,7 @@ export const Products = () => {
                 <th>NAME</th>
                 <th>PRICE</th>
                 <th>CATEGORY</th>
-                <th>BRAND</th>
+                {/* <th>BRAND</th> */}
                 <th></th>
               </tr>
             </thead>
@@ -88,7 +88,7 @@ export const Products = () => {
                   <td>{product.name}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
-                  <td>{product.brand}</td>
+                  {/* <td>{product.brand}</td> */}
                   <td>
                     <Modal.Trigger
                       triggerOf={`edit-product-${product._id}-modal`}

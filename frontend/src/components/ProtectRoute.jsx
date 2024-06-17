@@ -8,6 +8,9 @@ const ProtectRoute = ({ forAdmin = false }) => {
   const { pathname } = useLocation();
   const userInfo = useSelector(getUserInfo);
 
+  console.log(userInfo);
+  console.log('protect route');
+
   return userInfo ? (
     forAdmin ? (
       userInfo.isAdmin ? (

@@ -1,9 +1,6 @@
 import { Router } from 'express';
 
 import {
-  signup,
-  login,
-  logout,
   getUserProfile,
   getUserById,
   updateUserProfile,
@@ -15,10 +12,6 @@ import {
 import { protectRoute, restrictToAdmin } from '../middleware/authMiddleware.js';
 
 const userRouter = Router();
-
-userRouter.route('/signup').post(signup);
-userRouter.route('/login').post(login);
-userRouter.post('/logout', logout);
 
 userRouter.use(protectRoute);
 

@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { getUserInfo } from '../selectors';
 import { getCart } from '../selectors';
 
-import { useLogoutMutation } from '../slices/userApiSlice';
+import { useLogoutMutation } from '../slices/authApiSlice';
 import userSlice from '../slices/userSlice';
 import SearchBox from './SearchBox';
 
@@ -25,8 +25,9 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const res = await logout().unwrap();
+
       toast.success(res.message, { duration: 1000 });
-      dispatch(userSlice.actions.removeUser());
+      dispatch(userSlice.actions.removeUserInfo());
       // navigate('/login');
     } catch (err) {
       console.error(err);
@@ -44,7 +45,7 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <SearchBox />
+              {/* <SearchBox /> */}
               <LinkContainer to="/cart">
                 <Nav.Link>
                   <FaShoppingCart /> Cart
@@ -57,18 +58,6 @@ const Header = () => {
               </LinkContainer>
               {userInfo ? (
                 <>
-                  <NavDropdown title={userInfo.name}>
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>
-                        <FaUser /> Profile
-                      </NavDropdown.Item>
-                    </LinkContainer>
-
-                    <NavDropdown.Item onClick={handleLogout}>
-                      <FaSignOutAlt /> Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-
                   {userInfo.isAdmin && (
                     <NavDropdown title="Admin">
                       <LinkContainer to="/admin/products">
@@ -84,10 +73,21 @@ const Header = () => {
                       </LinkContainer>
                     </NavDropdown>
                   )}
+                  <NavDropdown title={userInfo.name}>
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>
+                        <FaUser /> Profile
+                      </NavDropdown.Item>
+                    </LinkContainer>
+
+                    <NavDropdown.Item onClick={handleLogout}>
+                      <FaSignOutAlt /> Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
                 </>
               ) : (
                 <LinkContainer to="/login">
-                  <Nav.Link ink href="/login">
+                  <Nav.Link href="/login">
                     <FaUser /> Sign In
                   </Nav.Link>
                 </LinkContainer>

@@ -8,7 +8,7 @@ const orderApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${ORDERS_URL}`,
         method: 'POST',
-        body: data,
+        data: data,
       }),
     }),
 
@@ -23,7 +23,7 @@ const orderApiSlice = apiSlice.injectEndpoints({
       query: ({ id, details }) => ({
         url: `${ORDERS_URL}/${id}/pay`,
         method: 'PATCH',
-        body: details,
+        data: details,
       }),
     }),
 
@@ -39,6 +39,7 @@ const orderApiSlice = apiSlice.injectEndpoints({
         url: `${ORDERS_URL}/my-orders`,
         method: 'GET',
       }),
+      keepUnusedDataFor: 0,
     }),
 
     getOrders: builder.query({

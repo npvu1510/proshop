@@ -7,7 +7,7 @@ const reviewApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${REVIEWS_URL}/${data.productId}`,
         method: 'POST',
-        body: data,
+        data: data,
       }),
     }),
   }),

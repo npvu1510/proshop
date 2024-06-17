@@ -16,6 +16,7 @@ const newReview = asyncHandler(async (req, res, next) => {
 
   //
   const review = {
+    product: productId,
     user: req.user._id,
     name: req.body.name,
     rating: req.body.rating,

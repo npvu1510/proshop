@@ -38,30 +38,23 @@ userSchema.pre('save', async function (next) {
   // console.log(this);
 
   if (!this.isModified('password')) {
-    console.log('Không đổi mật khẩu');
+    // console.log('Không đổi mật khẩu');
     return next();
   }
 
-  console.log('Đã đổi mật khẩu');
+  // console.log('Đã đổi mật khẩu');
 
   const salt = await bcrypt.genSalt(10);
   this.password = bcrypt.hashSync(this.password, salt);
 
-  // console.log(this.password);
   next();
 });
-
-// userSchema.pre('save', async function (next) {
-//   console.log('FROM 2', this.password);
-
-//   next();
-// });
 
 // static methods
 
 // methods
 userSchema.methods.checkPassword = async function (password) {
-  // console.log(password, this.password)
+  // console.log(password, this.password);
   return await bcrypt.compare(password, this.password);
 };
 

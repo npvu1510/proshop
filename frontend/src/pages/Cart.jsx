@@ -66,7 +66,7 @@ const Cart = () => {
                     </Col>
 
                     <Col md={3}>
-                      <Link to={`/product/${cartItem._id}`}>
+                      <Link to={`/products/${cartItem._id}`}>
                         {cartItem.name}
                       </Link>
                     </Col>

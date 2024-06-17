@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { getUserInfo } from '../selectors';
 
 import { useUpdateProfileMutation } from '../slices/userApiSlice';
-import { setCredentials } from '../slices/userSlice';
+import userSlice from '../slices/userSlice';
 import { useGetMyOrdersQuery } from '../slices/orderApiSlice';
 
 import Loader from '../components/Loader';
@@ -26,6 +26,8 @@ const Profile = () => {
     getValues,
     formState: { errors },
   } = useForm();
+
+  // Authentication
   const userInfo = useSelector(getUserInfo);
 
   const [updateProfile, { isLoading: isUpdatingProfile }] =
@@ -48,12 +50,9 @@ const Profile = () => {
         password,
         confirmPassword,
       }).unwrap();
-      // console.log(res);
+      console.log(res.data);
 
-      const { name: newName, email: newEmail } = res.data.user;
-      dispatch(
-        setCredentials({ userInfo: { name: newName, email: newEmail } })
-      );
+      dispatch(userSlice.actions.setUserInfo(res.data.user));
 
       toast.success('Profile updated successfully', { duration: 1000 });
     } catch (err) {

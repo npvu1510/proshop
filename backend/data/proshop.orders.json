@@ -1,0 +1,167 @@
+[
+  {
+    "user": "6669765b2c1b9e8209a5cfc8",
+
+    "orderItems": [
+      {
+        "name": "iPhone 13 Pro 256GB Memory",
+        "qty": 2,
+        "image": "/images/phone.jpg",
+        "price": 599.99,
+        "product": "6669763b0c00f8c18bd4b192"
+      },
+      {
+        "name": "Cannon EOS 80D DSLR Camera",
+        "qty": 2,
+        "image": "/images/camera.jpg",
+        "price": 929.99,
+        "product": "6669763b0c00f8c18bd4b193"
+      }
+    ],
+    "shippingAddress": {
+      "address": "131c, Lam Van Ben",
+      "city": "Ho Chi Minh city",
+      "postalCode": "10000",
+      "country": "Vietnam"
+    },
+    "paymentMethod": "PayPal",
+    "itemsPrice": 6119.92,
+    "taxPrice": 917.99,
+    "shippingPrice": 0,
+    "totalPrice": 7037.91,
+    "isPaid": false,
+    "isDelivered": false
+  },
+  {
+    "user": "6669765b2c1b9e8209a5cfc8",
+
+    "orderItems": [
+      {
+        "name": "iPhone 13 Pro 256GB Memory",
+        "qty": 2,
+        "image": "/images/phone.jpg",
+        "price": 599.99,
+        "product": "6669763b0c00f8c18bd4b192"
+      },
+      {
+        "name": "Cannon EOS 80D DSLR Camera",
+        "qty": 2,
+        "image": "/images/camera.jpg",
+        "price": 929.99,
+        "product": "6669763b0c00f8c18bd4b193"
+      }
+    ],
+    "shippingAddress": {
+      "address": "131c, Lam Van Ben",
+      "city": "Ho Chi Minh city",
+      "postalCode": "10000",
+      "country": "Vietnam"
+    },
+    "paymentMethod": "PayPal",
+    "itemsPrice": 6119.92,
+    "taxPrice": 917.99,
+    "shippingPrice": 0,
+    "totalPrice": 7037.91,
+    "isPaid": false,
+    "isDelivered": false
+  },
+  {
+    "user": "6669765b2c1b9e8209a5cfc8",
+
+    "orderItems": [
+      {
+        "name": "iPhone 13 Pro 256GB Memory",
+        "qty": 2,
+        "image": "/images/phone.jpg",
+        "price": 599.99,
+        "product": "6669763b0c00f8c18bd4b192"
+      },
+      {
+        "name": "Cannon EOS 80D DSLR Camera",
+        "qty": 2,
+        "image": "/images/camera.jpg",
+        "price": 929.99,
+        "product": "6669763b0c00f8c18bd4b193"
+      }
+    ],
+    "shippingAddress": {
+      "address": "131c, Lam Van Ben",
+      "city": "Ho Chi Minh city",
+      "postalCode": "10000",
+      "country": "Vietnam"
+    },
+    "paymentMethod": "PayPal",
+    "itemsPrice": 6119.92,
+    "taxPrice": 917.99,
+    "shippingPrice": 0,
+    "totalPrice": 7037.91,
+    "isPaid": false,
+    "isDelivered": false
+  },
+  {
+    "user": "6669765b2c1b9e8209a5cfc8",
+
+    "orderItems": [
+      {
+        "name": "iPhone 13 Pro 256GB Memory",
+        "qty": 2,
+        "image": "/images/phone.jpg",
+        "price": 599.99,
+        "product": "6669763b0c00f8c18bd4b192"
+      },
+      {
+        "name": "Cannon EOS 80D DSLR Camera",
+        "qty": 2,
+        "image": "/images/camera.jpg",
+        "price": 929.99,
+        "product": "6669763b0c00f8c18bd4b193"
+      }
+    ],
+    "shippingAddress": {
+      "address": "131c, Lam Van Ben",
+      "city": "Ho Chi Minh city",
+      "postalCode": "10000",
+      "country": "Vietnam"
+    },
+    "paymentMethod": "PayPal",
+    "itemsPrice": 6119.92,
+    "taxPrice": 917.99,
+    "shippingPrice": 0,
+    "totalPrice": 7037.91,
+    "isPaid": false,
+    "isDelivered": false
+  },
+  {
+    "user": "6669765b2c1b9e8209a5cfc8",
+
+    "orderItems": [
+      {
+        "name": "iPhone 13 Pro 256GB Memory",
+        "qty": 2,
+        "image": "/images/phone.jpg",
+        "price": 599.99,
+        "product": "6669763b0c00f8c18bd4b192"
+      },
+      {
+        "name": "Cannon EOS 80D DSLR Camera",
+        "qty": 2,
+        "image": "/images/camera.jpg",
+        "price": 929.99,
+        "product": "6669763b0c00f8c18bd4b193"
+      }
+    ],
+    "shippingAddress": {
+      "address": "131c, Lam Van Ben",
+      "city": "Ho Chi Minh city",
+      "postalCode": "10000",
+      "country": "Vietnam"
+    },
+    "paymentMethod": "PayPal",
+    "itemsPrice": 6119.92,
+    "taxPrice": 917.99,
+    "shippingPrice": 0,
+    "totalPrice": 7037.91,
+    "isPaid": false,
+    "isDelivered": false
+  }
+]

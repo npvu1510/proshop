@@ -15,11 +15,15 @@ import UserModal from '../components/UserModal';
 import ConfirmDelete from '../components/ConfirmDelete';
 
 import toast from 'react-hot-toast';
+import { getUserInfo } from '../selectors';
+import { useSelector } from 'react-redux';
 
 const Orders = () => {
-  const { data = null, isLoading, error, refetch } = useGetUsersQuery();
+  const { data = null, isFetching, error, refetch } = useGetUsersQuery();
   const users = data?.data.users;
-  console.log(error);
+
+  // AUTHENTICATION
+  const userInfo = useSelector(getUserInfo);
 
   const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
@@ -28,7 +32,7 @@ const Orders = () => {
       await deleteUser(userId).unwrap();
 
       refetch();
-      toast.success(`Deleted user #${users._id}`);
+      toast.success(`Deleted user #${userId}`);
     } catch (err) {
       console.log(err);
       toast.error(err?.data.message || err.message);
@@ -38,7 +42,7 @@ const Orders = () => {
   return (
     <Modal>
       <h1>Users</h1>
-      {isLoading ? (
+      {isFetching ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">
@@ -56,48 +60,56 @@ const Orders = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  {user.isAdmin ? (
-                    <FaCheck style={{ color: 'green' }} />
-                  ) : (
-                    <FaTimes style={{ color: 'red' }} />
-                  )}
-                </td>
+            {users.map((user) => {
+              if (userInfo.id === user._id) {
+                return null;
+              }
 
-                <td>
-                  <Modal.Trigger triggerOf={`edit-product-${user._id}-modal`}>
-                    <Button variant="light" className="btn-sm mx-2">
-                      <FaEdit />
-                    </Button>
-                  </Modal.Trigger>
+              return (
+                <tr key={user._id}>
+                  <td>{user._id}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    {user.isAdmin ? (
+                      <FaCheck style={{ color: 'green' }} />
+                    ) : (
+                      <FaTimes style={{ color: 'red' }} />
+                    )}
+                  </td>
 
-                  <Modal.Trigger triggerOf={`delete-product-${user._id}-modal`}>
-                    <Button variant="danger" className="btn-sm mx-2">
-                      <FaTrash />
-                    </Button>
-                  </Modal.Trigger>
-                </td>
+                  <td>
+                    <Modal.Trigger triggerOf={`edit-product-${user._id}-modal`}>
+                      <Button variant="light" className="btn-sm mx-2">
+                        <FaEdit />
+                      </Button>
+                    </Modal.Trigger>
 
-                <Modal.Window name={`edit-product-${user._id}-modal`}>
-                  <UserModal user={user} refetch={refetch} />
-                </Modal.Window>
+                    <Modal.Trigger
+                      triggerOf={`delete-product-${user._id}-modal`}
+                    >
+                      <Button variant="danger" className="btn-sm mx-2">
+                        <FaTrash />
+                      </Button>
+                    </Modal.Trigger>
+                  </td>
 
-                <Modal.Window name={`delete-product-${user._id}-modal`}>
-                  <ConfirmDelete
-                    resource="user"
-                    onConfirm={() => {
-                      handleDeleteUser(user._id);
-                    }}
-                    disabled={isDeleting}
-                  />
-                </Modal.Window>
-              </tr>
-            ))}
+                  <Modal.Window name={`edit-product-${user._id}-modal`}>
+                    <UserModal user={user} refetch={refetch} />
+                  </Modal.Window>
+
+                  <Modal.Window name={`delete-product-${user._id}-modal`}>
+                    <ConfirmDelete
+                      resource="user"
+                      onConfirm={() => {
+                        handleDeleteUser(user._id);
+                      }}
+                      disabled={isDeleting}
+                    />
+                  </Modal.Window>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       )}

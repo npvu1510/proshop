@@ -8,22 +8,53 @@ import { PAGE_SIZE } from '../utils/constants.js';
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
+  // FILTER
+  let filter = {};
+
   const search = req.query.search || null;
+  if (search) filter['$text'] = { $search: search };
+
+  // categories
+  const categories = req.query.categories;
+  // categories = categories.map((category) => category.toLowerCase());
+  if (categories && !categories.includes('All')) {
+    filter['category'] = { $in: categories };
+  }
+
+  // price
+
+  if (req.query.minPrice !== undefined && req.query.maxPrice !== undefined) {
+    const minPrice = req.query.minPrice * 1;
+    const maxPrice = req.query.maxPrice * 1;
+    filter['price'] = {
+      $gte: minPrice,
+      $lte: maxPrice,
+    };
+  }
+
+  // status
+  const status = req.query.status;
+  if (status && status !== 'All') {
+    filter['countInStock'] = status === 'In stock' ? { $gte: 1 } : { $lte: 0 };
+  }
+
+  // QUERY
+  console.log(filter);
+  let query = Product.find(filter);
+
+  // PAGINATION
   const page = req.query.page || 1;
   const limit = req.query.limit || PAGE_SIZE;
-  console.log(req.query);
 
-  let query = null;
-  const filter = search ? { $text: { $search: search } } : {};
-
-  query = Product.find(filter);
   query.skip(limit * (page - 1));
   query.limit(limit);
 
+  // WAIT
   const products = await query;
 
   res.status(200).json({
     status: 'success',
+
     data: {
       products,
       totalPages: Math.ceil((await Product.countDocuments(filter)) / limit),
@@ -37,7 +68,7 @@ const getProducts = asyncHandler(async (req, res) => {
 const getProductById = asyncHandler(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
   if (product) {
-    return res.json(product);
+    return res.status(200).json({ status: 'success', product });
   }
 
   next(new AppError(404, 'Resource not found'));
@@ -76,8 +107,16 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PATCH /api/products/:id
 // @access  Private/admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { _id, name, brand, category, price, description, countInStock } =
-    req.body;
+  const {
+    _id,
+    originalCategory,
+    name,
+    brand,
+    category,
+    price,
+    description,
+    countInStock,
+  } = req.body;
 
   const product = await Product.findById(_id);
   if (!product)
@@ -86,6 +125,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       error: 'Product not found',
     });
 
+  product.originalCategory = originalCategory;
   product.name = name || product.name;
   product.brand = brand || product.brand;
   product.category = category || product.category;

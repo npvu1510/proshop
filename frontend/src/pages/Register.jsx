@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import FormContainer from '../components/FormContainer';
 
-import { useSignupMutation } from '../slices/userApiSlice';
+import { useSignupMutation } from '../slices/authApiSlice';
 import { getUserInfo } from '../selectors';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
@@ -29,8 +29,8 @@ const Register = () => {
   const onSubmit = async (data) => {
     try {
       const res = await signup(data).unwrap();
-      // console.log(res.data);
-      dispatch(setCredentials(res.data));
+      dispatch(setCredentials(res.user));
+      toast.success(res.status);
     } catch (err) {
       console.log(err);
       toast.error(err.data.message);
