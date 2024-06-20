@@ -17,7 +17,6 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import App from './App';
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
-import Test from './pages/Test';
 
 import store from './store';
 import Cart from './pages/Cart';
@@ -66,8 +65,6 @@ const router = createBrowserRouter(
         <Route path="/admin/orders" element={<Orders />} />
         <Route path="/admin/users" element={<Users />} />
       </Route>
-
-      <Route path="/test" element={<Test />} />
     </Route>
   )
 );

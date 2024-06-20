@@ -14,6 +14,7 @@ import userSlice from '../slices/userSlice';
 import { getUserInfo } from '../selectors';
 
 const Login = () => {
+  // console.log('LOGIN');
   const dispatch = useDispatch();
 
   // AUTHENTICATION
@@ -68,10 +69,11 @@ const Login = () => {
                 message: 'invalid email address',
               },
             })}
+            isInvalid={!!errors.email}
           />
-          {errors.email && (
-            <Form.Text className="text-muted">{errors.email.message}</Form.Text>
-          )}
+          <Form.Control.Feedback type="invalid">
+            {errors.email && errors.email.message}
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="my-2" controlId="password">
           <Form.Label>Password</Form.Label>
@@ -88,12 +90,11 @@ const Login = () => {
                 message: 'Password must be at least 3 characters long',
               },
             })}
+            isInvalid={!!errors.password}
           />
-          {errors.password && (
-            <Form.Text className="text-muted">
-              {errors.password.message}
-            </Form.Text>
-          )}
+          <Form.Control.Feedback type="invalid">
+            {errors.password && errors.password.message}
+          </Form.Control.Feedback>
         </Form.Group>
         <Button
           type="submit"

@@ -121,17 +121,18 @@ const ProductFilter = ({ className }) => {
             <Form.Group className="mb-4" controlId="stockFilter">
               <Form.Label className="filter-label">Status</Form.Label>
               <div className="checkbox-list">
-                {statusForDisplay.map((s, idx) => (
-                  <Form.Check
-                    key={s}
-                    type="radio"
-                    name="statusRadio"
-                    label={s}
-                    value={s}
-                    {...{ defaultChecked: status.includes(s) }}
-                    onChange={handleStatusChange}
-                  />
-                ))}
+                {statusForDisplay &&
+                  statusForDisplay.map((s, idx) => (
+                    <Form.Check
+                      key={s}
+                      type="radio"
+                      name="statusRadio"
+                      label={s}
+                      value={s}
+                      {...{ defaultChecked: status.includes(s) }}
+                      onChange={handleStatusChange}
+                    />
+                  ))}
                 {/* <Form.Check type="radio" name="statusRadio" label="All" />
                 <Form.Check type="radio" name="statusRadio" label="In Stock" />
                 <Form.Check

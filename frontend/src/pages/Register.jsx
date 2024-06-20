@@ -71,13 +71,14 @@ const Register = () => {
               required: { value: true, message: 'Email is required !' },
               pattern: {
                 value: /\S+@\S+\.\S+/,
-                message: 'Entered value does not match email format',
+                message: 'Email is invalid !',
               },
             })}
+            isInvalid={!!errors.email}
           />
-          {errors.email && (
-            <Form.Text className="text-muted">{errors.email.message}</Form.Text>
-          )}
+          <Form.Control.Feedback type="invalid">
+            {errors.email && errors.email.message}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="my-2">
@@ -92,11 +93,15 @@ const Register = () => {
                 message: 'Password must be at least 3 characters',
               },
             })}
+            isInvalid={!!errors.password}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.password && errors.password.message}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="my-2">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             // id="confirmPassword"
             type="password"
@@ -113,7 +118,11 @@ const Register = () => {
               validate: (value) =>
                 value === getValues('password') || 'The passwords do not match',
             })}
+            isInvalid={!!errors.confirmPassword}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.confirmPassword && errors.confirmPassword.message}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Button type="submit" variant="primary">

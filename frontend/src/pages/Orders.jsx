@@ -13,7 +13,7 @@ const Orders = () => {
   const orders = data?.data.orders;
 
   // console.log(orders, isLoading, error);
-
+  // console.log(orders);
   return (
     <>
       <h1>Orders</h1>
@@ -40,7 +40,7 @@ const Orders = () => {
             {orders.map((order) => (
               <tr key={order._id}>
                 <td>{order._id}</td>
-                <td>{order.user && order.user.name}</td>
+                <td>{order.user}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
                 <td>${order.totalPrice}</td>
                 <td>

@@ -5,9 +5,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-let isRefreshingToken = false;
-let requestQueue = [];
-
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
