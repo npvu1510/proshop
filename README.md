@@ -69,13 +69,11 @@
 ![Order Detail Page](./screenshots/order_detail.png)
 
 ### Admin Order Management Page
-![Order Management Page](./screenshots/order_management.png)
+![Order Management Page](./screenshots/admin_orders.png)
 
 ### Admin Product Management Page
-![Product Management Page](./screenshots/product_management.png)
+![Product Management Page](./screenshots/admin_products.png)
 
-### Admin User Management Page
-![User Management Page](./screenshots/user_management.png)
 
 ## Project Setup
 
