@@ -1,8 +1,7 @@
 # Proshop
 
 - A comprehensive e-commerce application built with the MERN stack. This project includes features such as user authentication, product browsing with advanced filtering, PayPal payment integration, and more.
-- [Demo and explain](https://youtu.be/q0wX_nvp-sw
-)
+- [Detailed explanation and demo](https://youtu.be/q0wX_nvp-sw)
 
 ## Features
 
@@ -69,13 +68,11 @@
 ![Order Detail Page](./screenshots/order_detail.png)
 
 ### Admin Order Management Page
-![Order Management Page](./screenshots/order_management.png)
+![Order Management Page](./screenshots/admin_orders.png)
 
 ### Admin Product Management Page
-![Product Management Page](./screenshots/product_management.png)
+![Product Management Page](./screenshots/admin_products.png)
 
-### Admin User Management Page
-![User Management Page](./screenshots/user_management.png)
 
 ## Project Setup
 
@@ -86,11 +83,37 @@
 2. Install dependencies:
    ```sh
    npm install
+   
+3. Set up environment variables:
+   Create a `.env` file in the root directory and add the necessary environment variables. An example `.env` file:
+   ```env
+   NODE_ENV = development
+   PORT = 5000
 
-3. Start development server:
+   # MONGO
+   MONGO_URI = your_mongodb_uri
+
+   # TOKEN
+   SECRET_KEY = your_secret_key
+   REFRESH_SECRET_KEY = your_refresh_secret_key
+
+   # PAYPAL
+   PAYPAL_URL = https://api-m.sandbox.paypal.com
+   PAYPAL_GET_TOKEN_ENDPOINT = /v1/oauth2/token
+   PAYPAL_SHOW_ORDER_ENDPOINT = /v2/checkout/orders
+   PAYPAL_CLIENT_ID = your_paypal_client_id
+   PAYPAL_SECRET_KEY = your_paypal_secret_key
+
+4. Start development server:
    ```sh
    npm run server
    
-4. Start client:
+5. Start client:
    ```sh
    npm run client
+
+## Contribution
+Feel free to fork this project and submit pull requests. Any contributions are greatly appreciated.
+
+## License
+This project is licensed under the MIT License.
