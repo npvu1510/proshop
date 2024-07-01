@@ -1,8 +1,7 @@
 # Proshop
 
 - A comprehensive e-commerce application built with the MERN stack. This project includes features such as user authentication, product browsing with advanced filtering, PayPal payment integration, and more.
-- [Demo and explain](https://youtu.be/q0wX_nvp-sw
-)
+- [Detailed explanation and demo](https://youtu.be/q0wX_nvp-sw)
 
 ## Features
 
@@ -112,3 +111,9 @@
 5. Start client:
    ```sh
    npm run client
+
+## Contribution
+Feel free to fork this project and submit pull requests. Any contributions are greatly appreciated.
+
+## License
+This project is licensed under the MIT License.
