@@ -5,7 +5,6 @@
   "description": "Ecommerce application built with the MERN stack",
   "main": "server.js",
   "scripts": {
- 
     "server": "nodemon ./backend/server.js",
     "server:prod": "cross-env NODE_ENV=production nodemon ./backend/server.js",
     "client": "npm start --prefix frontend",
