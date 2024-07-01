@@ -46,7 +46,6 @@
 ## Screenshots
 ### Authentication Pages
 ![Login Page](./screenshots/login.png)
-![Register Page](./screenshots/register.png)
 
 ### Profile Page
 ![Profile Page](./screenshots/profile.png)
@@ -54,14 +53,20 @@
 ### Home Page
 ![Home Page](./screenshots/home.png)
 
+### Product Page
+![Product Detail Page](./screenshots/product.png)
+
 ### Product Detail Page
 ![Product Detail Page](./screenshots/product_detail.png)
 
 ### Cart Page
 ![Cart Page](./screenshots/cart.png)
 
-### Checkout Page
-![Checkout Page](./screenshots/checkout.png)
+### Place Order Page
+![Place Order Page](./screenshots/place_order.png)
+
+### Order Detail Page
+![Order Detail Page](./screenshots/order_detail.png)
 
 ### Admin Order Management Page
 ![Order Management Page](./screenshots/order_management.png)
