@@ -53,7 +53,7 @@
 ![Home Page](./screenshots/home.png)
 
 ### Product Page
-![Product Detail Page](./screenshots/product.png)
+![Product Page](./screenshots/product.png)
 
 ### Product Detail Page
 ![Product Detail Page](./screenshots/product_detail.png)
